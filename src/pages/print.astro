@@ -37,26 +37,29 @@ import S10 from '../components/sections/S10.astro';
     <!-- Contents -->
     <div class="content" style="max-width:none;padding:0">
       <h1>Contents</h1>
-      <div class="table-wrap"><table>
+      <div class="table-wrap"><table class="toc">
         <thead><tr><th>Section</th><th>Title</th></tr></thead>
         <tbody>
           {SECTIONS.map((s) => (
-            <tr><td class="mono">{s.num}</td><td>{s.title}</td></tr>
+            <tr>
+              <td class="mono"><a href={`#sec-${s.num}`}>{s.num}</a></td>
+              <td><a href={`#sec-${s.num}`}>{s.title}</a></td>
+            </tr>
           ))}
         </tbody>
       </table></div>
 
-      <div class="print-section-break"><S00 /></div>
-      <div class="print-section-break"><S01 /></div>
-      <div class="print-section-break"><S02 /></div>
-      <div class="print-section-break"><S03 /></div>
-      <div class="print-section-break"><S04 /></div>
-      <div class="print-section-break"><S05 /></div>
-      <div class="print-section-break"><S06 /></div>
-      <div class="print-section-break"><S07 /></div>
-      <div class="print-section-break"><S08 /></div>
-      <div class="print-section-break"><S09 /></div>
-      <div class="print-section-break"><S10 /></div>
+      <div class="print-section-break" id="sec-00"><S00 /></div>
+      <div class="print-section-break" id="sec-01"><S01 /></div>
+      <div class="print-section-break" id="sec-02"><S02 /></div>
+      <div class="print-section-break" id="sec-03"><S03 /></div>
+      <div class="print-section-break" id="sec-04"><S04 /></div>
+      <div class="print-section-break" id="sec-05"><S05 /></div>
+      <div class="print-section-break" id="sec-06"><S06 /></div>
+      <div class="print-section-break" id="sec-07"><S07 /></div>
+      <div class="print-section-break" id="sec-08"><S08 /></div>
+      <div class="print-section-break" id="sec-09"><S09 /></div>
+      <div class="print-section-break" id="sec-10"><S10 /></div>
 
       <p class="print-footer">
         {BASELINE.classification} · TACEDGE GROUND ENGINEERING V1 PRODUCT DEFINITION · {BASELINE.v1ShaShort} · PRINTED FROM /print

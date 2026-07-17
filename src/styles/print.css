@@ -28,6 +28,8 @@
   a { color: inherit; text-decoration: none; }
   /* Never show raw URLs in print */
   a[href]::after { content: none !important; }
+  /* Contents links stay visibly clickable in the PDF (internal anchors) */
+  .toc a { text-decoration: underline; text-decoration-color: #aeb89c; text-underline-offset: 2px; }
 
   /* Tables */
   .table-wrap { overflow: visible; border: none; }
