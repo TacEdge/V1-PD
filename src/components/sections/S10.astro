@@ -1,0 +1,140 @@
+---
+import SectionCover from '../SectionCover.astro';
+import Panel from '../Panel.astro';
+import { BASELINE } from '../../data/site';
+import { routesInventory, dbDomains, envVarGroups, testsInventory, glossary } from '../../data/inventories';
+import { capabilities } from '../../data/capabilities';
+import { screens } from '../../data/screens';
+---
+<SectionCover num="10" title="Appendices" kicker="Inventories · methodology · glossary">
+  Compact renderings of the full inventories. The complete machine-readable versions
+  live in the tacedge-v1-PD repository under <code>evidence/</code>.
+</SectionCover>
+
+<h2 id="a-routes">A. Route inventory</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Route(s)</th><th>Screen</th><th>Role</th><th>Classification</th></tr></thead>
+  <tbody>{routesInventory.map((r) => (
+    <tr><td class="mono" style="font-size:0.75rem">{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>
+  ))}</tbody>
+</table></div>
+<p>Full detail: <code>evidence/V1_Route_and_Screen_Inventory.csv</code>.</p>
+
+<h2 id="a-db">B. Database objects by domain</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Domain</th><th>Tables</th><th>Signal</th></tr></thead>
+  <tbody>{dbDomains.map((d) => (
+    <tr><td>{d.domain}</td><td class="mono" style="font-size:0.72rem">{d.tables}</td><td>{d.signal}</td></tr>
+  ))}</tbody>
+</table></div>
+<p>
+  62 active tables, 30+ enums, one storage bucket, RLS everywhere. Full per-object
+  detail including key fields, relationships and confidence:
+  <code>evidence/V1_Database_Object_Inventory.csv</code>.
+</p>
+
+<h2 id="a-dd">C. Key data dictionary (core record)</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Field (anchor_install_logs)</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">anchorReference</td><td>Human anchor ID (e.g. A-12) within a zone/section</td></tr>
+    <tr><td class="mono">status</td><td>anchor_status enum: planned · drilled · grouted · tested · not-required · requires-redrill</td></tr>
+    <tr><td class="mono">anchorDesignId</td><td>FK to the design template supplying specs</td></tr>
+    <tr><td class="mono">testType</td><td>none · proof · performance · acceptance · investigation · suitability</td></tr>
+    <tr><td class="mono">issues / attachments</td><td>jsonb arrays: declared exceptions; file references</td></tr>
+    <tr><td class="mono">facePhotoId / redrilledFrom</td><td>Spatial pin on a face photo; link to the anchor this one replaces</td></tr>
+    <tr><td class="mono">needsPmReview</td><td>Review flag (boolean) — V1's only review construct</td></tr>
+    <tr><td class="mono">deletedAt</td><td>Soft delete; archived rows purge after 30 days</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="a-deps">D. External dependencies</h2>
+<p>
+  54 notable runtime dependencies grouped and version-listed in
+  <code>evidence/V1_Dependency_Inventory.csv</code>. Highlights: React 18 / Vite 5 /
+  wouter / TanStack Query 5 / Radix + Tailwind; maplibre + three/potree; Drizzle 0.39 on
+  postgres 3.4; @anthropic-ai/sdk; twilio + ws + resend; @react-pdf + pdfkit + xlsx;
+  pg-boss (partial); @simplewebauthn (dormant); @playwright/test (missing declaration).
+</p>
+
+<h2 id="a-env">E. Environment variables (names only)</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Group</th><th>Names</th></tr></thead>
+  <tbody>{envVarGroups.map((g) => (
+    <tr><td>{g.group}</td><td class="mono" style="font-size:0.72rem">{g.names.join(' · ')}</td></tr>
+  ))}</tbody>
+</table></div>
+<p>
+  Fail-closed at startup: <code>DATABASE_URL</code>, <code>SESSION_SECRET</code> only.
+  Values are never recorded in this package.
+</p>
+
+<h2 id="a-tests">F. Test inventory</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>File</th><th>Covers</th></tr></thead>
+  <tbody>{testsInventory.map((t) => (
+    <tr><td class="mono" style="font-size:0.75rem">{t[0]}</td><td>{t[1]}</td></tr>
+  ))}</tbody>
+</table></div>
+<p>CI (GitHub Actions): tsc · eslint --max-warnings 0 · vitest run. No e2e in CI.</p>
+
+<h2 id="a-shots">G. Screenshot register</h2>
+<Panel tone="warn" title="Zero screenshots">
+  <p>No screenshots were captured or committed: the V1 application was not run during
+  this inspection (see section 00), and no production captures were available to
+  sanitise. Any future screenshots added to <code>public/screenshots/</code> must be
+  sanitised per the screenshot-safety rules and registered here.</p>
+</Panel>
+
+<h2 id="a-evidence">H. Evidence register summary</h2>
+<p>
+  50 register entries (EV-001 … EV-050) across platform, auth, tenancy, capture,
+  testing, safety, voice, integrations, offline, deployment, security and legacy areas —
+  each with classification, source file, confidence and validation column:
+  <code>evidence/V1_Evidence_Register.csv</code>. Distribution: 33 IMPLEMENTED ·
+  10 PARTIAL · 4 LEGACY · 1 DORMANT · 1 NOT IMPLEMENTED · 1 UNVERIFIED.
+</p>
+
+<h2 id="a-legacy">I. Legacy and dormant register</h2>
+<p>
+  24 items (LD-01 … LD-24): dropped aviation/Co-Pilot artefacts, dormant pages and
+  stubs, placeholder nav items, stale docs, committed one-off scripts, and the
+  attached_assets directory. Full register:
+  <code>evidence/V1_Legacy_and_Dormant_Register.csv</code>.
+</p>
+
+<h2 id="a-limits">J. Known limitations of this package</h2>
+<ul>
+  <li>The application was not run; runtime behaviour, screenshots, live data volumes, and production configuration are all outside the evidence base.</li>
+  <li>Client hook/component data-flow was traced at module level, not exhaustively per field.</li>
+  <li>Production infrastructure (Fly machine list, Supabase settings, secret values) is invisible to the repository and therefore to this package.</li>
+  <li>Counts (line numbers, occurrence counts) are as of commit <code>975a2ea</code> and will drift.</li>
+</ul>
+
+<h2 id="a-glossary">K. Glossary</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+  <tbody>{glossary.map((g) => (
+    <tr><td>{g[0]}</td><td>{g[1]}</td></tr>
+  ))}</tbody>
+</table></div>
+
+<h2 id="a-baseline">L. Repository baseline and methodology</h2>
+<ul>
+  <li><strong>Evidence source:</strong> {BASELINE.v1Repo}, branch <code>{BASELINE.v1Branch}</code>, commit <code>{BASELINE.v1Sha}</code> ({BASELINE.v1CommitDate}). Inspected {BASELINE.inspectionDate}, read-only, working tree clean before and after.</li>
+  <li><strong>Output repository:</strong> {BASELINE.pdRepo}, branch <code>{BASELINE.pdBranch}</code>. Framework: Astro 5 static build with Pagefind search and Mermaid-rendered SVG diagrams.</li>
+  <li><strong>Method:</strong> parallel structured code inspection (routes, schema, migrations, services, client pages, configuration, docs, git history) consolidated into the evidence registers, then into this site. Counts were produced with repository-wide searches at the pinned commit.</li>
+  <li><strong>Fonts:</strong> the specified Play / Be Vietnam Pro / JetBrains Mono are self-hosted via the OFL-licensed @fontsource packages — no substitutions were needed.</li>
+  <li><strong>Statistics:</strong> {capabilities.length} capabilities · {screens.length} page definition sheets covering 42 registered routes · 62 active tables (+22 dropped) · ~230 API endpoints · 50 evidence entries · 24 legacy/dormant items · 34 open questions.</li>
+</ul>
+
+<h2 id="a-confidence">M. Confidence assessment</h2>
+<p>
+  <strong>High confidence:</strong> repository structure, schema, routes, capabilities'
+  existence, security posture, debt findings — all code-traceable.
+  <strong>Medium confidence:</strong> behavioural descriptions of complex client surfaces,
+  offline depth, notification consumption, storage privacy.
+  <strong>Low/unverified:</strong> anything requiring runtime or production access — live
+  usage, reliability, AI accuracy, deployed machine topology. The package deliberately
+  does not disguise these gaps; they are the first work items of the scoping sprint.
+</p>

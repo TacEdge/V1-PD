@@ -1,0 +1,32 @@
+flowchart LR
+  subgraph Sources["File sources"]
+    UP["Web uploads (multer, memory)<br/>photos · audio · PDFs · attachments"]
+    DRONE["Drone survey files<br/>images · LAS/LAZ"]
+    GEN["Generated: XLSX · PDF exports"]
+  end
+
+  subgraph Store["Supabase Storage — single private bucket"]
+    B[("SUPABASE_STORAGE_BUCKET<br/>(default 'Storage 1')")]
+  end
+
+  subgraph Refs["Postgres references (storagePath text)"]
+    T["project_documents · face_photos ·<br/>anchor_import_jobs · job_brief_documents ·<br/>assets · site_files · drone_survey_files"]
+  end
+
+  subgraph Access["Read access"]
+    SIGN["15-min signed URLs (getReadUrl)"]
+    LEG["Legacy public-URL path<br/>(uploadFile return — PARTIAL)"]
+  end
+
+  PROC["Point-cloud worker:<br/>LAS/LAZ → Potree octree + FACETS →<br/>'drone-processed' output"]
+
+  UP --> B
+  DRONE --> B
+  GEN --> B
+  B --- T
+  B --> SIGN
+  B -.-> LEG
+  DRONE --> PROC --> B
+
+  note["Some legacy attachments stored inline<br/>as data-URLs in jsonb (notes, test photos)"]
+  T -.- note

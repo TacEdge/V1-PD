@@ -1,0 +1,119 @@
+---
+import SectionCover from '../SectionCover.astro';
+import Figure from '../Figure.astro';
+import Panel from '../Panel.astro';
+import Badge from '../Badge.astro';
+---
+<SectionCover num="07" title="Technical & Data Architecture" kicker="The implementation beneath the surfaces">
+  Stack, structure, data, identity, integrations, operations and debt — separated into
+  V1 observation, V1 constraint, and V2 scoping implication.
+</SectionCover>
+
+<h2 id="overview">Architecture overview</h2>
+<Figure id="FIG-07-01" src="/diagrams/d07-system-architecture.svg" alt="High-level system architecture: React SPA, Express server, Supabase data layer"
+  caption="High-level architecture: a single Express process serves the API and the built SPA; Supabase provides Postgres and object storage. Source: diagrams/d07-system-architecture.mmd." />
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Layer</th><th>Technology (version)</th></tr></thead>
+  <tbody>
+    <tr><td>Frontend</td><td>React 18.3 · Vite 5 · wouter 3.3 · TanStack Query 5.60 · Tailwind 3.4 + shadcn/ui (Radix) · maplibre-gl 5.18 · three 0.182 + potree-core 2.0 · @tiptap 3.23</td></tr>
+    <tr><td>Backend</td><td>Express 4 · TypeScript (ESM) · Drizzle ORM 0.39 · postgres 3.4 driver · zod 3.24</td></tr>
+    <tr><td>Data</td><td>Supabase Postgres (pooler) · Supabase Storage (one private bucket) · connect-pg-simple sessions</td></tr>
+    <tr><td>AI</td><td>@anthropic-ai/sdk 0.78 (claude-sonnet-4-6 · claude-haiku-4-5) · openai 6.9 (Realtime, one use) · Deepgram · ElevenLabs</td></tr>
+    <tr><td>Build/deploy</td><td>vite build + esbuild server bundle · Docker (node:20-slim + python3/openpyxl) · Fly.io syd · GitHub Actions CI</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="components">Application components and repository structure</h2>
+<Figure id="FIG-07-02" src="/diagrams/d08-app-components.svg" alt="Application component structure across client, shared and server directories"
+  caption="Component structure. shared/ carries schema, enums and RBAC config consumed by both sides. Source: diagrams/d08-app-components.mmd." />
+<ul>
+  <li><strong>Routing:</strong> ~45 route modules mounted in a single registry (server/routes.ts); large domains split into sub-module folders (anchor-tests/, anchor-logs/, safety-meetings/, reports/). All paths hard-code their <code>/api/...</code> prefixes.</li>
+  <li><strong>State management:</strong> TanStack Query with a 60 s global staleTime, IndexedDB persistence, and live views via refetchInterval. Client-local UI state only; no Redux-style store.</li>
+  <li><strong>Storage layer:</strong> 14 repository files composed into an IStorage facade; every query takes organizationId.</li>
+</ul>
+
+<h2 id="data">Data architecture</h2>
+<Figure id="FIG-07-03" src="/diagrams/d10-er-model.svg" alt="Entity relationship model centred on organizations, projects and anchor install logs"
+  caption="Core entity model (62 active tables; full inventory in the appendix and evidence CSV). Source: diagrams/d10-er-model.mmd." />
+<ul>
+  <li><strong>Tenancy:</strong> organization = tenant; no separate tenants table; orgType enum (engineering/port + dormant operator/council/mixed) shapes navigation.</li>
+  <li><strong>Keys and audit:</strong> UUID PKs; createdAt/updatedAt widespread; creator FKs; pervasive soft delete via deletedAt.</li>
+  <li><strong>JSONB:</strong> heavy use — form data/templates, AI responses, annotations, transcripts, feature flags, scope. Flexible but unvalidated at the DB layer.</li>
+  <li><strong>Migrations:</strong> hand-written SQL (idempotent by convention) tracked in schema_migrations and applied by the deploy release command; a parallel drizzle-kit push path created many tables with no CREATE migration file — the SQL history is incomplete by design.</li>
+  <li><strong>RLS:</strong> enabled on every public table, no policies (deny-by-default for Supabase API roles); the migrate script fails deploys that leave a table exposed. The Express role bypasses RLS — app-layer filtering is the real isolation.</li>
+</ul>
+
+<h2 id="identity">Authentication, authorisation and permissions</h2>
+<Figure id="FIG-07-04" src="/diagrams/d11-auth-permissions.svg" alt="Authentication flows and permission resolution"
+  caption="Identity and permission flow. WebAuthn is present in dependencies and schema but has no registered endpoints. Source: diagrams/d11-auth-permissions.mmd." />
+
+<h2 id="files">File and media storage</h2>
+<Figure id="FIG-07-05" src="/diagrams/d12-file-data-flow.svg" alt="File flow from upload sources through the private Supabase bucket to signed-URL access"
+  caption="File architecture: one private bucket, storagePath references, 15-minute signed reads, plus a legacy public-URL path and inline data-URL attachments. Source: diagrams/d12-file-data-flow.mmd." />
+
+<h2 id="voice">Voice architecture</h2>
+<Figure id="FIG-07-06" src="/diagrams/d13-voice-pipeline.svg" alt="Voice pipeline from Twilio through ElevenLabs to AI extraction and form storage"
+  caption="Voice intake. Phone and in-app paths converge on the same extraction and save pipeline. Source: diagrams/d13-voice-pipeline.mmd." />
+
+<h2 id="deployment">Deployment and environments</h2>
+<Figure id="FIG-07-07" src="/diagrams/d09-deployment.svg" alt="Deployment topology on Fly.io with Supabase"
+  caption="Deployment: one 1 GB shared-CPU machine (min 1 running), migration release-command gate, optional separate point-cloud worker machine. Source: diagrams/d09-deployment.mmd." />
+<ul>
+  <li><strong>Environments:</strong> production only, as far as the repository shows. No staging config exists; local dev needs a personal Supabase and .env. <Badge kind="UNVERIFIED" /> whether any shared non-prod environment exists outside the repo.</li>
+  <li><strong>Configuration:</strong> ~50 env vars (names in the appendix). Only DATABASE_URL and SESSION_SECRET fail closed; a written zod validator (server/lib/config.ts) is never invoked. Webhook/Twilio validation fails open when unset.</li>
+  <li><strong>Server timeout</strong> raised to 5 minutes for long AI requests — significant on a single shared VM.</li>
+</ul>
+
+<h2 id="ops">Error handling, logging, monitoring, testing</h2>
+<ul>
+  <li>Central async-handler + errMessage pattern; structured console logger (LOG_LEVEL) to Fly logs.</li>
+  <li><strong>No Sentry/APM/metrics/analytics.</strong> docs/observability.md marks them future work. <Badge kind="NOT IMPLEMENTED" /></li>
+  <li>Tests: 8 vitest files (AI modules, JSON repair, one route) run in CI with tsc + eslint --max-warnings 0; Playwright smoke spec exists but @playwright/test is undeclared, so e2e is not runnable. <Badge kind="PARTIAL" /></li>
+  <li>Backups: no evidence beyond Supabase defaults. <Badge kind="UNVERIFIED" /></li>
+</ul>
+
+<h2 id="security">Security and privacy posture</h2>
+<ul>
+  <li>Strong: strict production CSP (no unsafe-inline scripts), CORS allowlist with credential rules, rate limiting by endpoint class, hashed reset tokens, HMAC-bound voice stream tokens (5-min TTL), AI prompt sanitisation (sanitizeForPrompt/safeBlock), RLS + deploy audit.</li>
+  <li>Weaker: fail-open webhook/Twilio validators; un-zodded PATCH /api/tenant/config; @rockcontrol.app verification bypass; committed one-off scripts naming customer admins; attached_assets/ needing a PII/security pass; single Teams webhook URL for all tenants.</li>
+  <li>Privacy: personal data (names, emails, signatures, voice transcripts, phone callers) is stored per-tenant; no retention policy is visible beyond the 30-day purge of archived anchor logs.</li>
+</ul>
+
+<h2 id="debt">Technical debt, fragile and coupled areas</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Area</th><th>Observation</th><th>V2 scoping implication</th></tr></thead>
+  <tbody>
+    <tr><td>Oversized modules</td><td>FacePhotoCanvas 1,753 · repo-features 1,197 · daily-activity 1,111 · FacePhotoAnchorMap 1,088 · anchor-logs 950 (20 files &gt; 500 lines); several regrew after documented refactors</td><td>Cost of change is highest exactly where V2's field UX would differ most</td></tr>
+    <tr><td>Hook-extraction rule collapsed</td><td>124 inline useQuery/useMutation sites across 50 files, suppressed by eslint-disable TODOs</td><td>Client data layer is diffuse; hard to lift wholesale</td></tr>
+    <tr><td>Tenant branching in code</td><td>brandName/orgType string checks in App, nav, dashboards, email, voice, security middleware</td><td>"Config-not-code" needs a real boundary in V2</td></tr>
+    <tr><td>Status vocabularies duplicated</td><td>≥5 hex maps + ≥4 variant functions + 2 drifted form maps</td><td>A single status model is a V2 design decision, not a refactor</td></tr>
+    <tr><td>Stale internal docs</td><td>CLAUDE.md sizes/claims outdated; design_guidelines.md defunct; WEBHOOK_CONFIG.md stale</td><td>Trust code over docs during scoping</td></tr>
+    <tr><td>Dual grouping + incident models</td><td>projects/sites/jobs; incidents table vs forms</td><td>Data migration scope for V2 is ambiguous until resolved</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="reusable">Reusable parts of V1</h2>
+<ul>
+  <li><strong>High reuse potential:</strong> the schema's geotech core (projects/zones/designs/logs/tests with enums), the repository-layer tenant-isolation pattern, the RLS + migration-audit machinery, AI prompt-sanitisation and JSON-repair library, the voice pipeline design, XLSX/PDF export logic, and the offline sync-queue design.</li>
+  <li><strong>Reusable with caution:</strong> RBAC config model (carries aviation residue), form-template system (unvalidated jsonb), shadcn component layer (status colouring fragmented).</li>
+  <li><strong>Likely replace or rework:</strong> oversized page/canvas components, dashboards, tenant branching, sites/jobs models, marketing-in-SPA, observability (absent), e2e harness.</li>
+</ul>
+
+<h2 id="unknowable">Decisions that cannot be established from the repository</h2>
+<ul>
+  <li>Why sites/jobs were kept alongside projects; why incidents live twice.</li>
+  <li>Whether the point-cloud worker ever ran in production.</li>
+  <li>Original intent of the aviation vertical and Co-Pilot, and why both were dropped.</li>
+  <li>Capacity headroom, cost profile, and real reliability of the single-VM deployment.</li>
+</ul>
+
+<h2 id="v2-decisions">Decisions the V2 scoping sprint must make</h2>
+<ol>
+  <li>Platform continuity: extend this Express/Supabase/Fly stack, or re-platform — and either way, what carries over (schema core? repositories? voice?).</li>
+  <li>The review lifecycle: how V2's submit/confirm/re-open model maps onto (or replaces) status + needsPmReview + form statuses.</li>
+  <li>Work-type configurability: whether the anchor-specific schema generalises or a work-item abstraction replaces it.</li>
+  <li>Tenancy: one multi-vertical codebase vs a ground-engineering workspace; what happens to LPC/port.</li>
+  <li>Data migration: which of the 62 tables' data must survive into V2.</li>
+  <li>Operational baseline: observability, staging, backup verification — currently absent, and priced into any option.</li>
+</ol>

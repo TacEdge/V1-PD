@@ -1,0 +1,94 @@
+---
+import SectionCover from '../SectionCover.astro';
+import Badge from '../Badge.astro';
+import Conf from '../Conf.astro';
+import Evidence from '../Evidence.astro';
+import Panel from '../Panel.astro';
+import { capabilities, domains } from '../../data/capabilities';
+
+const classifications = ['IMPLEMENTED', 'PARTIAL', 'DORMANT', 'LEGACY', 'NOT IMPLEMENTED'];
+const tiers = ['Core', 'Supporting', 'Customer-specific', 'Experimental', 'Legacy'];
+---
+<SectionCover num="03" title="As-Built Capability Register" kicker={`${capabilities.length} capabilities · evidence-led`}>
+  Everything V1 can (and pointedly cannot) do, grouped by product domain, each entry
+  classified, evidenced and confidence-rated. Filters are a JavaScript enhancement;
+  the full register always renders.
+</SectionCover>
+
+<div class="filters no-print" id="cap-filters" data-scope="capabilities">
+  <button data-filter="all" aria-pressed="true">All ({capabilities.length})</button>
+  {classifications.map((c) => (
+    <button data-filter={`class:${c}`} aria-pressed="false">{c} ({capabilities.filter((x) => x.classification === c).length})</button>
+  ))}
+  {tiers.map((t) => (
+    <button data-filter={`tier:${t}`} aria-pressed="false">{t} ({capabilities.filter((x) => x.tier === t).length})</button>
+  ))}
+</div>
+
+<h2 id="boundary">Capability boundary</h2>
+<Panel title="What V1 does / does not do" tone="quiet">
+  <p><strong>Does:</strong> digital drill, grout and test capture for ground anchors; AI plan import and test-sheet OCR; daily activity and safety form capture; recorded, AI-analysed safety meetings; voice-first incident reporting by phone; multi-tenant branded delivery; XLSX/PDF/report outputs; offline-tolerant field use.</p>
+  <p><strong>Does not:</strong> gate records through a QA/confirm lifecycle before client visibility; serve engineers a designed read-only record; configure new work types from data (anchors are hard-coded; six other log types are nav placeholders); compute pay/invoicing beyond DAS rate exports; provide observability of itself; handle billing.</p>
+</Panel>
+
+{domains.map((domain) => (
+  <section>
+    <h2 id={`dom-${domain.toLowerCase().replace(/[^a-z]+/g, '-')}`}>{domain}</h2>
+    {capabilities.filter((c) => c.domain === domain).map((c) => (
+      <article
+        class="pds cap-card"
+        id={c.id}
+        data-class={c.classification}
+        data-tier={c.tier}
+      >
+        <h3>
+          <span class="mono">{c.id}</span> · {c.name}
+          &nbsp;<Badge kind={c.classification} />
+          &nbsp;<span class={`badge badge-${c.tier.toLowerCase().replace(/[^a-z]+/g, '-')}`}>{c.tier}</span>
+        </h3>
+        <p>{c.behaviour}</p>
+        <div class="pds-grid">
+          <dl>
+            <dt>User / role</dt><dd>{c.role}</dd>
+            <dt>Inputs</dt><dd>{c.inputs || '—'}</dd>
+            <dt>Outputs</dt><dd>{c.outputs || '—'}</dd>
+          </dl>
+          <dl>
+            <dt>Dependencies</dt><dd>{c.dependencies || '—'}</dd>
+            <dt>Known limitations</dt><dd>{c.limitations || 'None noted.'}</dd>
+            <dt>Confidence</dt><dd><Conf level={c.confidence} />{c.validation ? ` — validation: ${c.validation}` : ''}</dd>
+          </dl>
+        </div>
+        <Evidence title={`Evidence · ${c.id}`}>
+          <p class="mono" style="font-size:0.78rem">{c.evidence}</p>
+        </Evidence>
+      </article>
+    ))}
+  </section>
+))}
+
+<script>
+  // Progressive enhancement: classification/tier filtering.
+  const wrap = document.getElementById('cap-filters');
+  if (wrap) {
+    wrap.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('button');
+      if (!btn) return;
+      wrap.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true');
+      const f = btn.dataset.filter || 'all';
+      document.querySelectorAll<HTMLElement>('.cap-card').forEach((card) => {
+        let show = true;
+        if (f.startsWith('class:')) show = card.dataset.class === f.slice(6);
+        else if (f.startsWith('tier:')) show = card.dataset.tier === f.slice(5);
+        card.style.display = show ? '' : 'none';
+      });
+      document.querySelectorAll<HTMLElement>('section').forEach((sec) => {
+        const cards = sec.querySelectorAll<HTMLElement>('.cap-card');
+        if (!cards.length) return;
+        const any = [...cards].some((c) => c.style.display !== 'none');
+        sec.style.display = any ? '' : 'none';
+      });
+    });
+  }
+</script>

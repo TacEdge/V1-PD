@@ -1,0 +1,66 @@
+---
+import SectionCover from '../SectionCover.astro';
+import Badge from '../Badge.astro';
+import Conf from '../Conf.astro';
+import Evidence from '../Evidence.astro';
+import Panel from '../Panel.astro';
+import { screens } from '../../data/screens';
+---
+<SectionCover num="05" title="Page Definition Sheets" kicker={`${screens.length} sheets · every route accounted for`}>
+  One sheet per meaningful active screen. Small route variants share a sheet; the
+  complete route list is in the appendix and in evidence/V1_Route_and_Screen_Inventory.csv.
+</SectionCover>
+
+<Panel title="Screenshots" tone="warn">
+  <p>
+    No screenshots appear on these sheets. The application was not run during this
+    inspection (see section 00), so no live captures exist and none were fabricated.
+    Each sheet's structure is reconstructed from the page source, hooks and routes it
+    names under Evidence.
+  </p>
+</Panel>
+
+{screens.map((s) => (
+  <article class="pds" id={s.id}>
+    <h3>
+      <span class="mono">{s.id}</span> · {s.name} <Badge kind={s.classification} />
+    </h3>
+    <p><strong>Route{s.routes.length > 1 ? 's' : ''}:</strong> {s.routes.map((r, i) => (
+      <><code>{r}</code>{i < s.routes.length - 1 ? ' · ' : ''}</>
+    ))}</p>
+    <p>{s.job}</p>
+    <div class="pds-grid">
+      <dl>
+        <dt>User / role</dt><dd>{s.role}</dd>
+        <dt>Surface</dt><dd>{s.surface}</dd>
+        <dt>Primary user question</dt><dd>{s.userQuestion}</dd>
+        <dt>Entry points</dt><dd>{s.entry}</dd>
+        <dt>Exit points</dt><dd>{s.exits}</dd>
+        <dt>Information hierarchy</dt><dd>{s.hierarchy}</dd>
+        <dt>Main components</dt><dd>{s.components}</dd>
+      </dl>
+      <dl>
+        <dt>Inputs</dt><dd>{s.inputs}</dd>
+        <dt>Actions</dt><dd>{s.actions}</dd>
+        <dt>Outputs</dt><dd>{s.outputs}</dd>
+        <dt>States · validation · permissions</dt><dd>{s.states}</dd>
+        <dt>Data read</dt><dd class="mono" style="font-size:0.78rem">{s.reads}</dd>
+        <dt>Data written</dt><dd class="mono" style="font-size:0.78rem">{s.writes}</dd>
+        <dt>Dependencies</dt><dd>{s.dependencies || '—'}</dd>
+      </dl>
+    </div>
+    <dl>
+      <dt>Known limitations</dt><dd>{s.limitations || 'None noted.'}</dd>
+      <dt>Related capabilities</dt>
+      <dd>{s.capabilities.map((c, i) => (
+        <><a href={`/capability-register#${c}`} class="mono" style="font-size:0.8rem">{c}</a>{i < s.capabilities.length - 1 ? ' · ' : ''}</>
+      ))}</dd>
+      <dt>Confidence</dt>
+      <dd><Conf level={s.confidence} />{s.validation ? ` — validation: ${s.validation}` : ''}</dd>
+    </dl>
+    <Evidence title={`Evidence · ${s.id}`}>
+      <p class="mono" style="font-size:0.78rem">{s.evidence}</p>
+      <p>Screenshot: not captured — runtime unavailable (static inspection).</p>
+    </Evidence>
+  </article>
+))}

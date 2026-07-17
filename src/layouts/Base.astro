@@ -1,0 +1,106 @@
+---
+import '@fontsource/play/400.css';
+import '@fontsource/play/700.css';
+import '@fontsource/be-vietnam-pro/400.css';
+import '@fontsource/be-vietnam-pro/500.css';
+import '@fontsource/be-vietnam-pro/600.css';
+import '@fontsource/be-vietnam-pro/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '../styles/global.css';
+import '../styles/print.css';
+import { BASELINE, SECTIONS } from '../data/site';
+
+interface Props {
+  title: string;
+  sectionNum?: string; // e.g. '03' — highlights the sidebar entry
+  bare?: boolean; // print route: no shell chrome
+}
+const { title, sectionNum, bare = false } = Astro.props;
+const path = Astro.url.pathname;
+---
+<!doctype html>
+<html lang="en-NZ" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{title} · TACEDGE V1 Product Definition</title>
+    <meta name="description" content="TACEDGE Ground Engineering V1 Product Definition — evidence-based as-built documentation." />
+    <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+    <meta name="theme-color" content="#112411" />
+    <script>
+      // Progressive enhancement marker + optional PWA registration.
+      document.documentElement.classList.remove('no-js');
+      if ('serviceWorker' in navigator && location.protocol === 'https:') {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
+  </head>
+  <body>
+    {bare ? (
+      <slot />
+    ) : (
+      <div class="shell">
+        <aside class="sidebar" id="sidebar">
+          <a href="/" class="brand">TACEDGE</a>
+          <span class="brand-sub">V1 Product Definition · As-built</span>
+          <button
+            class="menu-toggle"
+            aria-expanded="false"
+            aria-controls="sidebar"
+            onclick="var s=document.getElementById('sidebar');s.classList.toggle('open');this.setAttribute('aria-expanded', s.classList.contains('open'))"
+          >Menu</button>
+          <div class="search-box" id="search"></div>
+          <script is:inline>
+            // Pagefind search UI — the index exists on built sites only; absent in dev.
+            (function () {
+              var s = document.createElement('script');
+              s.src = '/pagefind/pagefind-ui.js';
+              s.onload = function () {
+                if (window.PagefindUI) {
+                  new window.PagefindUI({ element: '#search', showSubResults: true, showImages: false });
+                }
+              };
+              s.onerror = function () { /* dev mode: no index yet */ };
+              document.head.appendChild(s);
+            })();
+          </script>
+          <nav aria-label="Sections">
+            {SECTIONS.map((s) => (
+              <a
+                href={s.num === '00' ? '/' : `/${s.slug}`}
+                aria-current={sectionNum === s.num ? 'page' : undefined}
+              ><span class="n">{s.num}</span>{s.title}</a>
+            ))}
+            <a href="/print" aria-current={path.startsWith('/print') ? 'page' : undefined}>
+              <span class="n">⎙</span>Print Product Definition
+            </a>
+          </nav>
+          <div class="side-meta">
+            <div>{BASELINE.classification} · {BASELINE.edition}</div>
+            <div>{BASELINE.v1Repo} @ {BASELINE.v1ShaShort}</div>
+            <div>Inspected {BASELINE.inspectionDate}</div>
+          </div>
+        </aside>
+        <div class="main">
+          <div class="topbar">
+            <span class="baseline">
+              Evidence baseline: {BASELINE.v1Repo} · <code>{BASELINE.v1ShaShort}</code> · {BASELINE.v1CommitDate} · static inspection — runtime UNVERIFIED
+            </span>
+            <a class="btn" href="/print">Print Product Definition</a>
+          </div>
+          <main class="content" data-pagefind-body>
+            <slot />
+            <p class="print-footer">
+              {BASELINE.classification} · TACEDGE GROUND ENGINEERING V1 PRODUCT DEFINITION · {BASELINE.v1ShaShort}
+            </p>
+          </main>
+        </div>
+      </div>
+    )}
+  </body>
+</html>

@@ -1,0 +1,57 @@
+/*
+  TACEDGE V1 Product Definition — design tokens.
+  Derived from the V2 Product Definition Package visual system (Brand Guidelines v1.1):
+  Primary Dark structural green, warm cream paper, restrained sage/olive support tones,
+  Play / Be Vietnam Pro / JetBrains Mono type system.
+  These tokens style THIS documentation site. The V1 application's own design system
+  is documented in section 06 and is a separate thing.
+*/
+:root {
+  /* Brand + structure */
+  --primary-dark: #112411;
+  --primary-hover: #1a3219;
+  --logo-forest: #2b4721;
+
+  /* Sage support tones */
+  --sage: #6e7d5c;
+  --sage-edge: #aeb89c;
+  --pale-sage: #b2b594;
+
+  /* Surfaces */
+  --cream: #f7f5ec;
+  --card: #ffffff;
+  --sage-tint: #e6ebd9;
+  --quiet-tint: #eff1e4;
+  --stage: #dde3d2;
+
+  /* Ink */
+  --ink: #242a1f;
+  --ink-60: #5b6253;
+  --ink-40: #646a5a;
+
+  /* Edges */
+  --divider: #cbd2c9;
+  --border: #e7e2d6;
+  --border-strong: #d9d3c4;
+
+  /* Signals */
+  --warning: #b07d2b;
+  --warning-tint: #f5ebd4;
+  --error: #9e3b2e;
+  --error-tint: #f3ddd6;
+  --ok: #3d6b3d;
+  --ok-tint: #e2ecdd;
+  --info: #44608a;
+  --info-tint: #e2e8f2;
+
+  /* Type */
+  --font-display: "Play", Georgia, serif;
+  --font-body: "Be Vietnam Pro", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+
+  /* Layout */
+  --content-max: 60rem;
+  --sidebar-w: 17.5rem;
+  --radius: 4px;
+  --radius-lg: 8px;
+}

@@ -1,0 +1,55 @@
+Dependency ID,Package,Version (declared),Purpose group,Used for,Usage signal,Notes
+DEP-001,react / react-dom,18.3.x,UI,Client framework,Active,
+DEP-002,wouter,3.3.x,UI,Client routing,Active,Single router in client/src/App.tsx
+DEP-003,@tanstack/react-query,5.60.x,UI,Server-state management,Active,60s global staleTime; IndexedDB persistence
+DEP-004,@radix-ui/* (26 packages),various,UI,shadcn/ui primitive components,Active,
+DEP-005,tailwindcss,3.4.x,UI,Styling,Active,With tailwindcss-animate + typography plugin
+DEP-006,lucide-react,latest 0.x,UI,Icon set,Active,
+DEP-007,framer-motion,11.x,UI,Animation,Active,
+DEP-008,recharts,2.15.x,UI,Charts,Active,Split via manualChunks
+DEP-009,@dnd-kit/core + sortable + utilities,6.x/10.x/3.x,UI,Drag and drop (form builder / report builder),Active,
+DEP-010,react-hook-form + @hookform/resolvers,7.55.x/3.10.x,UI,Forms + zod resolution,Active,
+DEP-011,@tiptap/react + starter-kit + pm,3.23.x,UI,Rich-text editor (report builder),Active,
+DEP-012,cmdk / vaul / embla-carousel / next-themes,various,UI,Command palette / drawers / carousel / theming,Active,
+DEP-013,maplibre-gl,5.18.x,Maps/3D,Map rendering,Active,Split via manualChunks
+DEP-014,maplibre-contour,latest,Maps/3D,Contour overlays,Active,
+DEP-015,terra-draw + terra-draw-maplibre-gl-adapter,latest,Maps/3D,Map annotation drawing,Active,
+DEP-016,@turf/area + distance + helpers,7.3.x,Maps/3D,Geospatial maths,Active,
+DEP-017,proj4,2.20.x,Maps/3D,Coordinate transforms (NZTM),Active,
+DEP-018,three,0.182.x,Maps/3D,Point-cloud rendering,Active,Split via manualChunks
+DEP-019,potree-core,2.0.12,Maps/3D,Potree octree point-cloud viewer,Active,
+DEP-020,@anthropic-ai/sdk,0.78.x,AI,Claude API — all analyzers,Active,Models: claude-sonnet-4-6 and claude-haiku-4-5-20251001
+DEP-021,openai,6.9.x,AI,OpenAI Realtime meeting session,Active (narrow),Single usage in safety-meetings/analysis.ts
+DEP-022,twilio,5.10.x,Comms/voice,PSTN voice intake + request validation,Active,
+DEP-023,resend,6.4.x,Comms/email,Transactional email,Active,
+DEP-024,ws,8.18.x,Comms/voice,WebSocket bridge Twilio↔ElevenLabs,Active,
+DEP-025,@microsoft/microsoft-graph-client + @azure/identity,3.0.x/4.13.x,Integrations,SharePoint sync / Teams / calendar,Active,
+DEP-026,@supabase/supabase-js,2.96.x,DB/storage,Supabase Storage (private bucket + signed URLs),Active,DB access itself is via postgres driver
+DEP-027,@react-pdf/renderer,4.5.x,Files/export,PDF generation (reports),Active,Yoga WASM — CSP wasm-unsafe-eval
+DEP-028,pdfkit,0.17.x,Files/export,PDF generation (DAS / test reports),Active,
+DEP-029,pdf-parse,2.4.x,Files/export,PDF text extraction (AI import),Active,
+DEP-030,mammoth,1.12.x,Files/export,DOCX extraction,Active,
+DEP-031,xlsx,0.18.x,Files/export,XLSX import/export (drill logs / tests / invoices),Active,Split via manualChunks
+DEP-032,multer,2.0.x,Files/export,Multipart uploads,Active,
+DEP-033,sharp,0.34.x,Files/export,Image processing,Active (dev dependency),
+DEP-034,bcryptjs,3.0.x,Auth,Password hashing (10 rounds),Active,
+DEP-035,@simplewebauthn/browser + server,13.2.x,Auth,WebAuthn/passkeys,Dormant,No server WebAuthn routes registered in routes.ts; client table exists
+DEP-036,jose,6.1.x,Auth,Azure AD JWT/JWKS verification,Active,
+DEP-037,express-session + connect-pg-simple,1.18.x/10.x,Auth,Postgres-backed sessions (30-day rolling),Active,
+DEP-038,drizzle-orm + drizzle-zod,0.39.x/0.7.x,DB,ORM + insert-schema generation,Active,
+DEP-039,postgres,3.4.x,DB,Postgres driver (Supabase pooler),Active,
+DEP-040,pg-boss,12.12.x,Jobs,Point-cloud job queue,Partial/Dormant,Only used by standalone point-cloud worker; not started by main app
+DEP-041,idb,8.x,Offline,IndexedDB offline store (sync queue / query cache / drafts),Active,
+DEP-042,zod + zod-validation-error,3.24.x,Validation,Route/AI schema validation,Active,
+DEP-043,helmet / cors / express-rate-limit,8.x/2.8.x/7.5.x,Security,CSP / CORS / rate limits,Active,
+DEP-044,express,4.x,Server,HTTP framework,Active,
+DEP-045,vite,5.x,Build,Client build + dev middleware,Active,manualChunks split maplibre/three/pdf/xlsx/charts
+DEP-046,esbuild,latest,Build,Server bundle + migrate script bundle,Active,
+DEP-047,tsx,latest,Build,Dev-time TS execution,Active,
+DEP-048,vitest,4.x,Test,Unit test runner,Active,test/test:run/test:ui scripts; used in CI — CLAUDE.md claim that it is unused is stale
+DEP-049,@playwright/test,not declared,Test,E2E smoke test,Broken/Partial,playwright.config.ts + e2e/smoke.spec.ts exist but the package is missing from package.json; no test:e2e script
+DEP-050,msw,2.12.x,Test,HTTP mocking,Active (tests),
+DEP-051,eslint (+ config),9.x,Lint,eslint --max-warnings 0 in CI,Active,
+DEP-052,husky,latest,Tooling,Pre-commit hooks,Active,
+DEP-053,crypto-random-string,latest,Auth,Token generation,Active,
+DEP-054,isomorphic-fetch,latest,Integrations,Graph client fetch polyfill,Active,

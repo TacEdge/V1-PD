@@ -1,0 +1,36 @@
+flowchart LR
+  subgraph Users["V1 users"]
+    OP["Field crew<br/>(FieldTech / Subcontractor)"]
+    SUP["Site supervisor"]
+    PM["Project manager /<br/>HSE manager / OrgAdmin"]
+    CV["Client viewer<br/>(read-only)"]
+    CALLER["Phone caller<br/>(voice intake)"]
+  end
+
+  subgraph V1["RockControl (V1) — one Fly.io app, multi-tenant"]
+    APP["Express 4 API + React 18 SPA<br/>rockcontrol.app · tacedgepm.com · lpcreporting.app"]
+  end
+
+  subgraph External["External services"]
+    SB[("Supabase<br/>Postgres + Storage")]
+    ANT["Anthropic Claude<br/>(analysis / extraction)"]
+    DG["Deepgram (STT)"]
+    EL["ElevenLabs<br/>(phone agent)"]
+    TW["Twilio (PSTN)"]
+    RS["Resend (email)"]
+    MS["Microsoft Graph<br/>(SharePoint · Teams · Outlook)"]
+    LZ["LINZ / Mapbox<br/>(map tiles)"]
+  end
+
+  OP -->|capture drill/grout/forms| APP
+  SUP -->|review + safety| APP
+  PM -->|configure · review · export| APP
+  CV -->|view submissions| APP
+  CALLER -->|phone call| TW --> APP
+  APP <--> SB
+  APP --> ANT
+  APP --> DG
+  APP <--> EL
+  APP --> RS
+  APP <--> MS
+  APP --> LZ

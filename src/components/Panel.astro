@@ -1,0 +1,8 @@
+---
+interface Props { title?: string; tone?: 'default' | 'warn' | 'alert' | 'quiet' }
+const { title, tone = 'default' } = Astro.props;
+---
+<div class={`panel ${tone !== 'default' ? tone : ''}`}>
+  {title && <p class="panel-title">{title}</p>}
+  <slot />
+</div>

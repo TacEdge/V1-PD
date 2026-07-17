@@ -1,0 +1,94 @@
+---
+import SectionCover from '../SectionCover.astro';
+import Panel from '../Panel.astro';
+import Badge from '../Badge.astro';
+---
+<SectionCover num="06" title="As-Built Design System" kicker="The V1 application's visual system — not this website's">
+  What the V1 application actually ships: tokens, type, components and status colouring,
+  including where no coherent system exists. This is distinct from the visual system of
+  this documentation site, which follows the V2 package styling.
+</SectionCover>
+
+<Panel title="Headline finding" tone="alert">
+  <p>
+    The repository's <code>design_guidelines.md</code> describes a <strong>"Rock Control"
+    red-and-slate Material Design system on Inter</strong>. The shipped application is a
+    <strong>TACEDGE forest-green shadcn/ui ("new-york") system</strong> with per-tenant CSS-variable
+    theming and an Apple-style glass skin for the TACEDGE brand. The document is legacy
+    and misleads new contributors. <Badge kind="LEGACY" />
+  </p>
+</Panel>
+
+<h2 id="tokens">Design tokens (as built)</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Token</th><th>Value (light)</th><th>Role</th></tr></thead>
+  <tbody>
+    <tr><td><code>--primary</code></td><td><code>hsl(104 37% 20%)</code> — dark forest green</td><td>Brand primary; also --ring and sidebar primary</td></tr>
+    <tr><td><code>--background</code> / <code>--card</code></td><td><code>210 14% 99%</code> / white</td><td>Page / raised surfaces</td></tr>
+    <tr><td><code>--foreground</code></td><td><code>0 0% 23%</code></td><td>Body text</td></tr>
+    <tr><td><code>--border</code></td><td><code>0 0% 91%</code></td><td>Hairlines</td></tr>
+    <tr><td><code>--destructive</code> / <code>--warning</code> / <code>--success</code></td><td><code>0 70% 50%</code> / <code>38 92% 50%</code> / <code>142 71% 45%</code></td><td>Signal colours</td></tr>
+    <tr><td><code>--radius</code></td><td><code>0.5rem</code> (Tailwind lg 9px / md 6px / sm 3px; glass theme 0.75rem)</td><td>Corner radius</td></tr>
+    <tr><td><code>--shadow-2xs … --shadow-2xl</code></td><td>Layered HSL-alpha scale</td><td>Elevation; re-tuned per theme</td></tr>
+    <tr><td>tacedge palette (Tailwind)</td><td>forest <code>#2b4721</code> · olive <code>#6e7d5c</code> · sage <code>#b2b594</code> · cream <code>#fcf2e8</code></td><td>Brand constants</td></tr>
+  </tbody>
+</table></div>
+<p>
+  Dark mode is class-based with a full parallel token set; the primary green is identical
+  in both modes. Breakpoints are stock Tailwind (<code>sm/md/lg</code>); the documented
+  desktop ≥1024 / tablet / mobile &lt;768 intent maps onto them. The app shell locks to
+  <code>h-dvh</code> with contained body scroll for mobile stability.
+</p>
+
+<h2 id="brand-assets">Logos and brand assets</h2>
+<ul>
+  <li>Per-tenant logo, favicon and primary colour come from <code>tenant_config</code>, applied at runtime by the useTenant provider (hex → HSL onto <code>--primary</code>, <code>--ring</code>, sidebar tokens) with document title and favicon swaps.</li>
+  <li>Hostname-keyed pre-paint defaults are hard-coded for the four known brands so the login screen is on-brand before the API answers; the cache key has been version-bumped seven times (churn signal).</li>
+  <li>Static assets ship in <code>client/public/</code> (per-tenant favicons: LPC SVG, SteepWorks PNG, TacEdge PNG).</li>
+</ul>
+
+<h2 id="typography">Typography</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Face</th><th>Where defined</th><th>Actual use</th></tr></thead>
+  <tbody>
+    <tr><td>Inter</td><td><code>--font-sans</code> on body</td><td>The working UI face across the application</td></tr>
+    <tr><td>Play</td><td>Tailwind <code>font-heading</code></td><td>Marketing/landing surfaces primarily</td></tr>
+    <tr><td>Be Vietnam Pro</td><td>Tailwind <code>font-body</code></td><td>Marketing/landing surfaces primarily</td></tr>
+    <tr><td>Menlo (mono)</td><td><code>--font-mono</code></td><td>Data readouts; <code>tabular-nums</code> styled in glass theme</td></tr>
+  </tbody>
+</table></div>
+<p>
+  Fonts load from Google Fonts via <code>client/index.html</code> (CSP allowlists
+  fonts.googleapis.com / fonts.gstatic.com) — not self-hosted. No enforced type scale
+  exists in config; the scale in design_guidelines.md is aspirational.
+</p>
+
+<h2 id="components">Component inventory</h2>
+<ul>
+  <li><strong>shadcn/ui:</strong> 51 files in <code>components/ui/</code> (new-york style, neutral base) including custom additions <code>centred-dialog</code>, <code>combobox</code>, <code>signature-pad</code>.</li>
+  <li><strong>Application components:</strong> app-sidebar, top-bar, mobile-bottom-nav, search-command, dynamic-form-renderer, PullToRefresh, error-boundary; domain sets under <code>project/</code> (largest — FacePhotoCanvas 1,753 lines, plan designer, quick-fill dialogs, map/drone survey components), <code>meetings/</code>, <code>submissions/</code>, <code>dashboard/</code> (incl. LPCDashboard), <code>reports/</code> (block editor), <code>shared/map/</code>, <code>landing/</code>.</li>
+  <li><strong>Icons:</strong> lucide-react exclusively (212 files). <strong>Toasts:</strong> the shadcn Radix toast system, mounted once (88 usage sites); no sonner.</li>
+</ul>
+
+<h2 id="status">Status indicators</h2>
+<p>Status colouring is the least systematic part of the UI — three competing patterns coexist: <Badge kind="PARTIAL" /></p>
+<ol>
+  <li>Badge <code>cva</code> variants (default/secondary/destructive/warning/success/outline) selected by at least four separately-duplicated <code>getStatusVariant()</code> functions.</li>
+  <li>Two near-identical form-status maps that have drifted (one omits <code>submitted</code>).</li>
+  <li>At least five independent raw-hex <code>STATUS_COLORS</code> maps for the anchor lifecycle (planned slate, drilled blue, grouted cyan, tested green, requires-redrill amber) used by canvas pins, plan designer, dashboards and PDF exports.</li>
+</ol>
+
+<h2 id="inconsistencies">Inconsistencies and one-off styling</h2>
+<ul>
+  <li><code>lib/dashboardTheme.ts</code> carries two palette intents at once: a "Rock Red" chart palette and a re-briefed "military/industrial matte charcoal" set, with dead legacy aliases kept so old callers compile.</li>
+  <li>Dashboards (both generic KPI cards and LPCDashboard) hard-code hex gradients outside the token system.</li>
+  <li>117 inline <code>style=</code> usages across 50 files — largely legitimate canvas/SVG/PDF positioning, but a competing pattern.</li>
+  <li>The glass theme (blur, gradients, float/pulse animations) activates only when <code>brandName === "TacEdge"</code>, so tenants experience structurally different design systems.</li>
+</ul>
+
+<h2 id="accessibility">Accessibility evidence</h2>
+<p>
+  Radix primitives provide baseline keyboard/ARIA behaviour, and shadcn patterns carry
+  focus styles. No accessibility testing artefacts, audits or lint rules were found in
+  the repository. <Badge kind="UNVERIFIED" />
+</p>

@@ -1,0 +1,47 @@
+Route,Screen name,User role,Surface,Classification,Primary source file,Main data read,Main data written,Screenshot,Notes
+/ (unauthenticated — TacEdge brand),Landing,Public,Responsive,IMPLEMENTED,client/src/pages/landing.tsx,—,—,Not captured — runtime unavailable,Marketing landing; only shown when brandName === 'TacEdge'
+/ (unauthenticated — custom tenant),Login,Public,Responsive,IMPLEMENTED,client/src/pages/login.tsx,tenant branding,login session,Not captured — runtime unavailable,Custom-domain tenants land straight on Login
+/login,Login,Public,Responsive,IMPLEMENTED,client/src/pages/login.tsx,—,session,Not captured — runtime unavailable,Email+password and Microsoft OAuth
+/register,Register,Public,Responsive,IMPLEMENTED,client/src/pages/register.tsx,—,user account,Not captured — runtime unavailable,
+/forgot-password,Forgot Password,Public,Responsive,IMPLEMENTED,client/src/pages/forgot-password.tsx,—,reset token request,Not captured — runtime unavailable,
+/reset-password,Reset Password,Public,Responsive,IMPLEMENTED,client/src/pages/reset-password.tsx,—,password,Not captured — runtime unavailable,
+/request-access,Request Access,Public,Responsive,IMPLEMENTED,client/src/pages/request-access.tsx,—,access_requests,Not captured — runtime unavailable,
+/forms/:id/upload,Form Upload,Public + authenticated,Phone-first,IMPLEMENTED,client/src/pages/form-upload.tsx,/api/forms/:id,attachments,Not captured — runtime unavailable,Registered in both router branches
+/about; /geotech; /geospatial; /pricing; /case-studies; /contact; /experience; /try,Marketing pages (8),Public,Responsive,IMPLEMENTED (TacEdge brand only),client/src/pages/marketing/*,—,contact/trial submissions,Not captured — runtime unavailable,Marketing site bundled inside the product SPA; gated on brandName === 'TacEdge'
+/ (authenticated),Dashboard,All roles (role-adaptive widgets),Responsive,IMPLEMENTED,client/src/pages/dashboard.tsx,/api/dashboard/management-overview,—,Not captured — runtime unavailable,LPC tenant gets bespoke LPCDashboard component
+/projects,Projects,Management/Supervisor/Viewer,Responsive,IMPLEMENTED,client/src/pages/projects.tsx,useProjects,project create,Not captured — runtime unavailable,Relabelled 'Departments' for port orgType
+/projects/:id,Project Detail,Management/Supervisor,Desktop-first,IMPLEMENTED,client/src/pages/project-detail.tsx,useProjects/useAnchorLogs/useProjectNav,via tabs,Not captured — runtime unavailable,Tabbed workspace: anchors/designs/face photos/map/reports/DAS
+/jobs,Jobs,Field/Supervisor,Responsive,IMPLEMENTED,client/src/pages/jobs.tsx,useJobsList,—,Not captured — runtime unavailable,Older H&S grouping unit alongside projects
+/jobs/:code,Job Detail by Code,Field,Phone-first,IMPLEMENTED,client/src/pages/job-detail-by-code.tsx,/api/jobs/code/:code,—,Not captured — runtime unavailable,
+/sites,Sites,Management/Supervisor,Responsive,PARTIAL,client/src/pages/sites.tsx,/api/sites,—,Not captured — runtime unavailable,Pre-project operating model; still navigable
+/sites/:id,Site Detail,Management/Supervisor,Responsive,PARTIAL,client/src/pages/site-detail.tsx,useSiteDetail,—,Not captured — runtime unavailable,
+/drill,Drill,Field,Phone/tablet-first,IMPLEMENTED,client/src/pages/drill.tsx,useDrill/useForms,drill+grout logs,Not captured — runtime unavailable,797 lines; offline draft persistence via localStorage/IndexedDB
+/anchor-logs,Drill Summary (Anchor Logs),Management/Supervisor,Desktop-first,IMPLEMENTED,client/src/pages/anchor-logs.tsx,useAnchorLogsPage,bulk edits; XLSX export; email,Not captured — runtime unavailable,950 lines
+/anchor-testing,Anchor Testing,Management/Supervisor/Viewer,Responsive,IMPLEMENTED,client/src/pages/anchor-testing.tsx,useAnchorTestingPage,test results,Not captured — runtime unavailable,Opt-in feature flag
+/daily-activity,Daily Activity Sheets,Field/Supervisor,Responsive,IMPLEMENTED,client/src/pages/daily-activity.tsx,/api/daily-activity-sheets + DAS config,DAS sheets; PDF/XLSX export,Not captured — runtime unavailable,1111 lines — largest page
+/notes,Notes,Field/Supervisor,Responsive,IMPLEMENTED,client/src/pages/notes.tsx,useNotes,notes,Not captured — runtime unavailable,
+/incidents,Incidents,All safety roles,Responsive,IMPLEMENTED,client/src/pages/incidents.tsx,/api/incident-reports,incident forms,Not captured — runtime unavailable,Form-template driven
+/near-misses,Near Misses,All safety roles,Responsive,IMPLEMENTED,client/src/pages/near-misses.tsx,/api/near-misses,near-miss forms,Not captured — runtime unavailable,
+/site-inspections,Site Inspections,Management/Supervisor,Responsive,IMPLEMENTED,client/src/pages/site-inspections.tsx,/api/site-inspections,inspection forms,Not captured — runtime unavailable,
+/asset-assessments,Asset Assessments,Management/Supervisor,Responsive,IMPLEMENTED,client/src/pages/asset-assessments.tsx,/api/asset-assessments,assessment forms,Not captured — runtime unavailable,
+/assets,Asset Register,Management/Supervisor,Responsive,IMPLEMENTED,client/src/pages/assets.tsx,useAssets,assets,Not captured — runtime unavailable,Jacks/gauges/vehicles/plant with cert expiry
+/meetings,Safety Meetings,All roles,Responsive,IMPLEMENTED,client/src/pages/meetings.tsx,useMeetings,meetings; recordings,Not captured — runtime unavailable,644 lines; voice recorder; SteepWorks disables recording via flag
+/meetings/:id,Meeting Detail,All roles,Responsive,IMPLEMENTED,client/src/pages/meeting-detail.tsx,useMeetingDetail,attendance; tasks; AI analysis,Not captured — runtime unavailable,577 lines; live refetchInterval
+/documents,Documents,Management/Viewer,Desktop-first,IMPLEMENTED,client/src/pages/documents.tsx,useDocuments (MS Graph drives),—,Not captured — runtime unavailable,SharePoint-backed browser; opt-in flag
+/calendar,Calendar,Management/Viewer,Responsive,IMPLEMENTED,client/src/pages/calendar.tsx,useCalendar,events,Not captured — runtime unavailable,Outlook-synced; opt-in flag
+/projects/:projectId/reports,Project Reports,Management,Desktop-first,IMPLEMENTED,client/src/pages/reports.tsx,useReports,report create,Not captured — runtime unavailable,
+/reports/:reportId,Report Builder,Management,Desktop-only,IMPLEMENTED,client/src/pages/report-builder.tsx,useReports,report doc + revisions,Not captured — runtime unavailable,Tiptap block editor + AI propose
+/forms,Forms Gallery,All roles,Responsive,IMPLEMENTED,client/src/pages/forms.tsx (wraps forms-list.tsx),/api/form-templates/available,—,Not captured — runtime unavailable,
+/forms/:id,Fill Form,Field,Phone-first,IMPLEMENTED,client/src/pages/fill-form.tsx,useForms/useAssets/useProjects,form submissions,Not captured — runtime unavailable,Dynamic renderer from form_templates.schema jsonb
+/form-builder,Form Builder,Management,Desktop-only,IMPLEMENTED,client/src/pages/form-builder.tsx,useForms,form templates,Not captured — runtime unavailable,574 lines; default-on flag
+/variations,Variation Form,Management/Supervisor,Responsive,IMPLEMENTED,client/src/pages/variation-form.tsx,via VariationFormBuilder,variations,Not captured — runtime unavailable,Opt-in flag
+/submissions,Submissions,All roles,Responsive,IMPLEMENTED,client/src/pages/submissions.tsx,/api/forms,archive/status changes,Not captured — runtime unavailable,
+/settings,Settings,Management (canManageUsers),Desktop-first,IMPLEMENTED,client/src/pages/settings.tsx,useAuth/useTenant,org config; users; branding; RBAC overrides,Not captured — runtime unavailable,Nav-gated by capability; page itself not router-gated
+/profile,Profile,All roles,Responsive,IMPLEMENTED,client/src/pages/profile.tsx,useProfile,profile,Not captured — runtime unavailable,Hosts manual PWA install prompt
+/help,Help,All roles,Responsive,IMPLEMENTED,client/src/pages/help.tsx,—,—,Not captured — runtime unavailable,
+(forced),Change Password,All roles,Responsive,IMPLEMENTED,client/src/pages/change-password.tsx,—,password,Not captured — runtime unavailable,Rendered when user.mustChangePassword
+*,Not Found,All roles,Responsive,IMPLEMENTED,client/src/pages/not-found.tsx,—,—,Not captured — runtime unavailable,
+(none),Admin Users,Management,Desktop,DORMANT,client/src/pages/admin-users.tsx,/api/users,—,Not captured — runtime unavailable,224 lines; never imported into the router; user management lives in Settings
+(none),Take-5 Form (standalone),Field,Phone,LEGACY,client/src/pages/take-5-form.tsx,—,—,Not captured — runtime unavailable,Superseded by dynamic form templates; no imports
+/soil-nail-logs; /shotcrete-logs; /borehole-logs; /instrumentation; /slope-monitoring; /lab-testing,Geotech log placeholders (6),Management,—,NOT IMPLEMENTED,shared/rbac-config.ts (nav entries only),—,—,—,Nav entries exist behind opt-in flags; no route components — resolve to NotFound if enabled
+/aviation/* (10 nav entries),Aviation module,—,—,LEGACY,shared/rbac-config.ts:113-148,—,—,—,Module dropped (migration 0055); nav config entries remain; no routes registered

@@ -1,0 +1,32 @@
+flowchart LR
+  subgraph Field["Field device (PWA)"]
+    UI["React SPA"]
+    IDB[("IndexedDB<br/>sync-queue · query-cache · form-drafts")]
+  end
+
+  subgraph Server["Express API"]
+    VAL["zod validation +<br/>capability middleware"]
+    REPO["Repositories<br/>(org-scoped queries)"]
+    AIX["AI analyzers<br/>(Claude)"]
+  end
+
+  subgraph Data["Supabase"]
+    PG[("Postgres<br/>anchor_install_logs · forms ·<br/>anchor_test_results · …")]
+    ST[("Storage bucket<br/>photos · PDFs · point clouds")]
+  end
+
+  subgraph Out["Review & release"]
+    SUM["Drill Summary / Submissions"]
+    XLS["XLSX / PDF exports"]
+    RPT["Report Builder + revisions"]
+    EM["Email (Resend)"]
+    SP["SharePoint sync / Teams alert"]
+  end
+
+  UI -->|offline-first| IDB -->|replay on reconnect| VAL
+  UI --> VAL --> REPO --> PG
+  UI -->|uploads| ST
+  REPO --> AIX --> PG
+  PG --> SUM --> XLS --> EM
+  PG --> RPT
+  PG --> SP

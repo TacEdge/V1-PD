@@ -1,0 +1,34 @@
+flowchart LR
+  subgraph Setup["Project setup (PM)"]
+    P1["Create project<br/>+ zones/sections"]
+    P2["Define anchor designs,<br/>grout mixes, drill methods"]
+    P3["Plan anchors<br/>(manual or AI PDF import)"]
+  end
+
+  subgraph Capture["Field capture (crew)"]
+    C1["Drill log<br/>(lithology by depth)"]
+    C2["Grout log"]
+    C3["Anchor test<br/>(photo OCR + readings)"]
+    C4["Daily activity sheet ·<br/>safety forms · meetings"]
+  end
+
+  subgraph Review["Review (PM / supervisor)"]
+    R1["Drill Summary<br/>(bulk review, PM flags)"]
+    R2["Anchor Testing<br/>(conformance + AI check)"]
+  end
+
+  subgraph Output["Outputs"]
+    O1["XLSX drill-log export"]
+    O2["Test report PDF"]
+    O3["Report Builder<br/>(Tiptap + AI propose)"]
+    O4["DAS PDF / invoice XLSX"]
+    O5["Email to engineer<br/>(Resend)"]
+  end
+
+  P1 --> P2 --> P3 --> C1 --> C2 --> C3
+  C1 & C2 & C3 --> R1
+  C3 --> R2
+  R1 --> O1 & O3
+  R2 --> O2
+  C4 --> O4
+  O1 & O2 --> O5

@@ -1,0 +1,23 @@
+{
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Be Vietnam Pro, Arial, sans-serif",
+    "fontSize": "14px",
+    "primaryColor": "#e6ebd9",
+    "primaryTextColor": "#242a1f",
+    "primaryBorderColor": "#6e7d5c",
+    "secondaryColor": "#eff1e4",
+    "tertiaryColor": "#f7f5ec",
+    "lineColor": "#5b6253",
+    "textColor": "#242a1f",
+    "clusterBkg": "#f7f5ec",
+    "clusterBorder": "#d9d3c4",
+    "edgeLabelBackground": "#ffffff",
+    "nodeBorder": "#6e7d5c",
+    "mainBkg": "#e6ebd9",
+    "titleColor": "#112411"
+  },
+  "flowchart": { "curve": "linear", "htmlLabels": true, "padding": 10 },
+  "er": { "fontSize": 13 },
+  "sequence": { "actorFontWeight": 600 }
+}

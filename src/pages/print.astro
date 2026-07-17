@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import { BASELINE, SECTIONS } from '../data/site';
+import S00 from '../components/sections/S00.astro';
+import S01 from '../components/sections/S01.astro';
+import S02 from '../components/sections/S02.astro';
+import S03 from '../components/sections/S03.astro';
+import S04 from '../components/sections/S04.astro';
+import S05 from '../components/sections/S05.astro';
+import S06 from '../components/sections/S06.astro';
+import S07 from '../components/sections/S07.astro';
+import S08 from '../components/sections/S08.astro';
+import S09 from '../components/sections/S09.astro';
+import S10 from '../components/sections/S10.astro';
+---
+<Base title="Print · Complete Product Definition" bare>
+  <div class="print-shell">
+    <!-- Cover -->
+    <div class="print-cover">
+      <div>
+        <p class="kicker" style="color:var(--sage-edge)">TACEDGE · Product Definition Package</p>
+        <h1 style="color:#fff;font-size:2.8rem;margin-top:4rem">TACEDGE<br/>Ground Engineering</h1>
+        <p style="color:var(--sage-tint);font-size:1.15rem">V1 · As-Built Product Definition</p>
+        <p style="color:var(--sage-tint);max-width:30rem">
+          The evidence-based definition of the V1 production application, prepared for the
+          incoming Interim Development Technical Lead ahead of the V2 technical scoping sprint.
+        </p>
+      </div>
+      <div class="mono" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--sage-edge);line-height:1.9">
+        STATUS&nbsp;&nbsp;{BASELINE.edition}<br/>
+        CLASS&nbsp;&nbsp;&nbsp;{BASELINE.classification}<br/>
+        SOURCE&nbsp;&nbsp;{BASELINE.v1Repo} @ {BASELINE.v1ShaShort} · {BASELINE.v1CommitDate}<br/>
+        INSPECTED&nbsp;{BASELINE.inspectionDate} · static inspection · runtime UNVERIFIED
+      </div>
+    </div>
+
+    <!-- Contents -->
+    <div class="content" style="max-width:none;padding:0">
+      <h1>Contents</h1>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Section</th><th>Title</th></tr></thead>
+        <tbody>
+          {SECTIONS.map((s) => (
+            <tr><td class="mono">{s.num}</td><td>{s.title}</td></tr>
+          ))}
+        </tbody>
+      </table></div>
+
+      <div class="print-section-break"><S00 /></div>
+      <div class="print-section-break"><S01 /></div>
+      <div class="print-section-break"><S02 /></div>
+      <div class="print-section-break"><S03 /></div>
+      <div class="print-section-break"><S04 /></div>
+      <div class="print-section-break"><S05 /></div>
+      <div class="print-section-break"><S06 /></div>
+      <div class="print-section-break"><S07 /></div>
+      <div class="print-section-break"><S08 /></div>
+      <div class="print-section-break"><S09 /></div>
+      <div class="print-section-break"><S10 /></div>
+
+      <p class="print-footer">
+        {BASELINE.classification} · TACEDGE GROUND ENGINEERING V1 PRODUCT DEFINITION · {BASELINE.v1ShaShort} · PRINTED FROM /print
+      </p>
+    </div>
+  </div>
+
+  <div class="topbar no-print" style="position:sticky;top:0">
+    <span class="baseline">Print view — use your browser's Print dialog (A4 portrait, background graphics on) to save as PDF.</span>
+    <button class="btn" onclick="window.print()">Print now</button>
+    <a class="btn ghost" href="/">Back to site</a>
+  </div>
+
+  <style>
+    /* Screen preview of the print composition */
+    .print-shell { max-width: 56rem; margin: 0 auto; padding: 2rem 2rem 6rem; }
+    .print-cover {
+      background: var(--primary-dark); color: var(--cream); border-radius: 8px;
+      padding: 3rem; min-height: 28rem; display: flex; flex-direction: column;
+      justify-content: space-between; margin-bottom: 3rem;
+    }
+    @media print { .print-shell { max-width: none; padding: 0; } }
+  </style>
+</Base>

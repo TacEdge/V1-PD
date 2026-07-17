@@ -1,0 +1,144 @@
+---
+import SectionCover from '../SectionCover.astro';
+import MetaPanel from '../MetaPanel.astro';
+import Panel from '../Panel.astro';
+import Badge from '../Badge.astro';
+---
+<SectionCover num="02" title="Product Brief" kicker="V1 as it currently exists">
+  The as-built product brief: problem, users, operating model, scope boundary and a
+  reconstructed Definition of Done. Where V1's original intent could not be found in the
+  repository, that is said plainly rather than invented.
+</SectionCover>
+
+<MetaPanel items={[
+  { label: 'What this artefact is', value: 'As-built Product Brief, reconstructed from the codebase' },
+  { label: 'Product', value: 'RockControl / TACEDGE Ground Engineering V1' },
+  { label: 'Original brief', value: 'None found in the repository' },
+  { label: 'Confidence', value: 'High on scope · Medium on intent' },
+]} />
+
+<h2 id="problem">Product problem addressed by V1</h2>
+<p>
+  Frontline construction and geotechnical work generates records — drill logs, grout
+  logs, anchor tests, sign-ons, incidents, toolbox talks, daily timesheets — that
+  traditionally live on paper and reach the office late, incomplete or not at all. V1
+  digitises that capture at the point of work, keeps it usable where connectivity is
+  poor, gives managers a live view, and turns the accumulated record into exports and
+  reports a client or engineer can receive.
+</p>
+<p>
+  A second, quieter problem V1 addresses is <strong>multi-customer delivery</strong>: one team
+  operating one codebase for several branded customers with different vocabularies
+  (geotech contractor vs port operator) and different feature needs.
+</p>
+
+<h2 id="users">Users and apparent roles</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Role (DB)</th><th>Group</th><th>What they do in V1</th></tr></thead>
+  <tbody>
+    <tr><td><code>FieldTech</code> / <code>Subcontractor</code></td><td>Field</td><td>Capture drill/grout logs, fill forms, sign JSAs, record daily activity, report incidents by voice or app.</td></tr>
+    <tr><td><code>SiteSupervisor</code></td><td>Supervisor</td><td>Everything Field does, plus review surfaces and meeting management.</td></tr>
+    <tr><td><code>ProjectManager</code> / <code>HSEManager</code></td><td>Management</td><td>Configure projects and setup entities, review and bulk-edit logs, run tests and reports, manage meetings and incidents.</td></tr>
+    <tr><td><code>OrgAdmin</code></td><td>Management</td><td>All of the above plus users, permissions overrides, branding and integrations.</td></tr>
+    <tr><td><code>ClientViewer</code></td><td>Viewer</td><td>Read-only access to projects, testing, documents, submissions.</td></tr>
+    <tr><td><code>Pilot</code> · <code>CouncilApprover</code> · <code>CouncilAdmin</code></td><td>—</td><td>Aviation-era roles with no remaining surfaces (<Badge kind="DORMANT" />).</td></tr>
+  </tbody>
+</table></div>
+<p>
+  <strong>Primary user:</strong> the field crew member on a phone — the capture surfaces,
+  offline machinery and voice intake all centre on them.
+  <strong>Apparent economic buyer:</strong> the contracting organisation's management
+  (INFERRED from the admin/branding/export emphasis; the repository contains no pricing
+  or billing code at all, so commercial mechanics are outside the codebase).
+</p>
+
+<h2 id="operating-model">Current operating model and main workflow</h2>
+<p>
+  The load-bearing workflow, as built, is: <strong>configure → capture → review → export</strong>.
+  A PM creates a project, defines zones/sections and setup entities (anchor designs,
+  grout mixes, drill methods), and plans anchors manually or by AI PDF import. Field
+  crew work through the plan on the Drill screen; anchor status auto-advances
+  (planned → drilled → grouted → tested). Tests are recorded against standards, often by
+  photographing the paper test sheet for AI OCR. Management reviews on the Drill
+  Summary, flags rows for PM review, and produces XLSX exports, test PDFs, daily
+  activity invoices and built-up engineer reports. Safety capture (forms, meetings,
+  voice reports) runs alongside on the same project spine.
+</p>
+
+<h2 id="scope">Scope as classified</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Band</th><th>Contents</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><Badge kind="IMPLEMENTED" /> Core</td>
+      <td>Projects/zones/sections; anchor designs, grout mixes, drill methods; AI anchor-plan import; drill/grout capture with lithology; anchor testing with OCR and exports; Drill Summary; daily activity sheets + DAS specs; dynamic forms + form builder; incidents/near-misses/inspections/assessments; JSA sign-ins; safety meetings with transcription and AI analysis; asset register; voice intake (phone + in-app); report builder with revisions; dashboards; offline PWA; multi-tenant theming; RBAC with per-org overrides.</td>
+    </tr>
+    <tr>
+      <td><Badge kind="PARTIAL" /></td>
+      <td>Sites and jobs models (semi-legacy, still routed); point-cloud processing (worker not started by the app); e2e testing (config without dependency); notification preferences (consumption untraced); public form-upload flow (auth model unclear).</td>
+    </tr>
+    <tr>
+      <td><Badge kind="DORMANT" /></td>
+      <td>WebAuthn/passkeys; admin-users page; drone route stubs; startup env validator; components/examples scaffolding.</td>
+    </tr>
+    <tr>
+      <td><Badge kind="LEGACY" /></td>
+      <td>Aviation vertical (dropped tables; surviving roles/org-types/nav entries); Co-Pilot event stream (dropped); Take-5 hard-coded page; structured voice mode; "Rock Red" design documentation.</td>
+    </tr>
+    <tr>
+      <td><Badge kind="NOT IMPLEMENTED" /> (where relevant)</td>
+      <td>Soil-nail/shotcrete/borehole/instrumentation/slope-monitoring/lab-testing log types (nav placeholders only); QA/confirm review lifecycle; engineer-facing release gate; billing/pricing; observability.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2 id="customer-config">Customer-specific configuration evident in the product</h2>
+<ul>
+  <li><strong>LPC (port):</strong> orgType <code>port</code> hides Project Operations; marine relabelling; bespoke dashboard; own voice agent, Twilio number and webhook secrets; branding deliberately excluded from the public branding endpoint.</li>
+  <li><strong>SteepWorks:</strong> form-builder flag enabled by migration; meeting recording disabled; "Daily Sign-In" nav re-pointed to a form template; invoice-format DAS export.</li>
+  <li><strong>TACEDGE brand:</strong> marketing site and glass theme, both gated on the literal brand name.</li>
+  <li><strong>Rock Control:</strong> default tenant with geotech opt-in flags enabled.</li>
+</ul>
+
+<h2 id="dod">Reconstructed as-built Definition of Done</h2>
+<Panel title="Reconstruction notice" tone="warn">
+  <p>No original V1 product brief or Definition of Done exists in the repository. The
+  following is <strong>reconstructed from what the implementation visibly optimises for</strong>,
+  and should be validated with the founders rather than treated as agreed history.</p>
+</Panel>
+<ol>
+  <li>A field crew member can capture a drill/grout record on a phone, including with degraded connectivity, without paper.</li>
+  <li>A PM can see and correct the drilling record across a project and export it in the formats clients already expect (XLSX, PDF).</li>
+  <li>An anchor test recorded on paper can be digitised by photo and checked for conformance without re-keying.</li>
+  <li>A safety event can be reported in under a minute by voice, from any phone, and reach the right people (Teams/email).</li>
+  <li>A new customer can be onboarded by configuration (branding, flags, copy) rather than a fork — with code-level branching accepted where configuration ran out.</li>
+</ol>
+
+<h2 id="value">Observable evidence that V1 creates value</h2>
+<ul>
+  <li>Three-plus production tenants with seeds, custom domains and per-tenant voice numbers.</li>
+  <li>Migration cadence of roughly one schema change per week across 2026, tracking real feature demand (zones, DAS specs, job briefs, signatories).</li>
+  <li>Deploy-gating added in response to a real outage — the system is operated, not just built.</li>
+</ul>
+<p>
+  <strong>Success measures that cannot be established from the repository:</strong> revenue,
+  retention, active users, capture completion rates, report turnaround times, and paper
+  displacement. None are instrumented.
+</p>
+
+<h2 id="principal-limitations">Principal product limitations</h2>
+<ul>
+  <li>No review/confirmation lifecycle between capture and client visibility — <code>needsPmReview</code> is a flag, not a gate.</li>
+  <li>No engineer-facing surface; ClientViewer is a permission level, not a designed experience.</li>
+  <li>Work types are hard-coded around anchors; nothing like a work-type configuration exists.</li>
+  <li>Structural ambiguity between projects, sites and jobs, and between the two incident stores.</li>
+  <li>Customer-specific behaviour has leaked from configuration into code.</li>
+</ul>
+
+<h2 id="confidence">Confidence and validation required</h2>
+<p>
+  Scope claims here are <span class="conf conf-high">High</span> confidence (traceable to
+  code). Intent claims — primary user, buyer, Definition of Done — are
+  <span class="conf conf-medium">Medium</span> and marked for founder validation in
+  section 09.
+</p>

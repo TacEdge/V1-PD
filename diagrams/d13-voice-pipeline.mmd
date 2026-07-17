@@ -1,0 +1,20 @@
+flowchart LR
+  CALLER["Caller"] --> TW["Twilio PSTN"]
+  TW -->|"POST /api/voice/incoming-call<br/>(signature validated*)"| API["Express"]
+  API -->|"TwiML Connect Stream<br/>+ streamToken (HMAC, 5-min TTL)"| WS["WS /api/voice/media-stream"]
+  WS <-->|audio bridge| EL["ElevenLabs<br/>Conversational AI agent<br/>(per-tenant agent ID)"]
+  EL -->|"server tools:<br/>caller-info · projects · form schema · submit"| API
+  EL -->|"conversation-end webhook<br/>(HMAC validated*)"| API
+  API --> EXT["ai-form-extractor<br/>(Claude Haiku)<br/>narrative → formData"]
+  EXT --> SAVE["saveVoiceForm"]
+  SAVE --> PG[("forms (source='voice')")]
+  SAVE --> SPX["SharePoint sync"]
+  SAVE --> TEAMS["Teams alert<br/>(incident / near-miss)"]
+
+  subgraph Web["In-app path"]
+    MIC["Browser mic"] --> DG["Deepgram STT<br/>(short-lived key)"]
+    DG -->|"POST /api/voice/quick/submit"| EXT
+  end
+
+  note["* fail-open when secrets unset —<br/>validation skipped with a startup warning"]
+  API -.- note

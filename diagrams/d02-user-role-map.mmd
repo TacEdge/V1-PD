@@ -1,0 +1,35 @@
+flowchart TB
+  subgraph Roles["10 database roles (user_role enum)"]
+    OA["OrgAdmin"]
+    PMR["ProjectManager"]
+    HSE["HSEManager"]
+    SS["SiteSupervisor"]
+    FT["FieldTech"]
+    SC["Subcontractor"]
+    CVW["ClientViewer"]
+    PIL["Pilot · CouncilApprover · CouncilAdmin<br/>(aviation-era — dormant)"]
+  end
+
+  subgraph Groups["4 navigation role groups (ROLE_TO_GROUP)"]
+    MG["Management<br/>full nav"]
+    SV["Supervisor<br/>trimmed admin"]
+    FD["Field<br/>capture-focused"]
+    VW["Viewer<br/>read-only"]
+  end
+
+  subgraph Caps["7 capabilities × none/read/write<br/>(static matrix + per-org overrides)"]
+    C1["canManageJobs · canManageForms ·<br/>canManageIncidents · canManageMeetings ·<br/>canManageUsers · canManageIntegrations · canViewAll"]
+  end
+
+  OA --> MG
+  PMR --> MG
+  HSE --> MG
+  SS --> SV
+  FT --> FD
+  SC --> FD
+  CVW --> VW
+  PIL -.-> MG
+  MG --> C1
+  SV --> C1
+  FD --> C1
+  VW --> C1

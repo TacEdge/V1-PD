@@ -1,0 +1,86 @@
+// Appendix inventories (compact renderings of the evidence CSVs).
+
+export const routesInventory = [
+  ['/', 'Landing (TacEdge) or Login (custom tenant); Dashboard when authenticated', 'Public / all', 'IMPLEMENTED'],
+  ['/login · /register · /forgot-password · /reset-password · /request-access', 'Authentication screens', 'Public', 'IMPLEMENTED'],
+  ['/about · /geotech · /geospatial · /pricing · /case-studies · /contact · /experience · /try', 'Marketing pages (TacEdge brand only)', 'Public', 'IMPLEMENTED'],
+  ['/forms/:id/upload', 'Form upload (dual-registered public + authed)', 'External / field', 'IMPLEMENTED'],
+  ['/projects · /projects/:id', 'Projects list · project workspace', 'Mgmt / Supervisor', 'IMPLEMENTED'],
+  ['/jobs · /jobs/:code', 'Jobs list · job by code', 'Field / Supervisor', 'PARTIAL (semi-legacy)'],
+  ['/sites · /sites/:id', 'Sites list · site detail', 'Mgmt / Supervisor', 'PARTIAL (semi-legacy)'],
+  ['/drill', 'Field drill & grout capture', 'Field', 'IMPLEMENTED'],
+  ['/anchor-logs', 'Drill Summary review + exports', 'Mgmt / Supervisor', 'IMPLEMENTED'],
+  ['/anchor-testing', 'Anchor load testing (flag)', 'Mgmt / Supervisor / Viewer', 'IMPLEMENTED'],
+  ['/daily-activity', 'Daily activity sheets', 'Field / Supervisor', 'IMPLEMENTED'],
+  ['/notes', 'Project notes', 'Field / Supervisor', 'IMPLEMENTED'],
+  ['/incidents · /near-misses · /site-inspections · /asset-assessments', 'Safety report lists (4)', 'Safety roles', 'IMPLEMENTED'],
+  ['/assets', 'Asset register', 'Mgmt / Supervisor', 'IMPLEMENTED'],
+  ['/meetings · /meetings/:id', 'Safety meetings list · detail', 'All', 'IMPLEMENTED'],
+  ['/documents', 'SharePoint document browser (flag)', 'Mgmt / Viewer', 'IMPLEMENTED'],
+  ['/calendar', 'Calendar / Outlook sync (flag)', 'Mgmt / Viewer', 'IMPLEMENTED'],
+  ['/projects/:projectId/reports · /reports/:reportId', 'Project reports · Report Builder', 'Mgmt', 'IMPLEMENTED'],
+  ['/forms · /forms/:id', 'Forms gallery · dynamic fill', 'All / Field', 'IMPLEMENTED'],
+  ['/form-builder', 'Form template builder', 'Mgmt', 'IMPLEMENTED'],
+  ['/variations', 'Contract variations (flag)', 'Mgmt / Supervisor', 'IMPLEMENTED'],
+  ['/submissions', 'Submissions inbox', 'All', 'IMPLEMENTED'],
+  ['/settings', 'Organisation settings', 'OrgAdmin', 'IMPLEMENTED'],
+  ['/profile · /help', 'Profile · Help', 'All', 'IMPLEMENTED'],
+  ['(forced) change-password', 'Forced password rotation', 'All', 'IMPLEMENTED'],
+  ['* (authed)', 'Not Found', 'All', 'IMPLEMENTED'],
+  ['(none) admin-users.tsx', 'User admin table — never routed', 'Mgmt', 'DORMANT'],
+  ['(none) take-5-form.tsx', 'Hard-coded Take-5 — superseded', 'Field', 'LEGACY'],
+  ['/soil-nail-logs … /lab-testing (6)', 'Nav placeholders, no components', '—', 'NOT IMPLEMENTED'],
+  ['/aviation/* (10 nav entries)', 'Dropped aviation module', '—', 'LEGACY'],
+] as const;
+
+export const dbDomains: { domain: string; tables: string; signal: string }[] = [
+  { domain: 'Tenancy & identity', tables: 'organizations · tenant_config · users · sessions · clients · password_resets · email_verifications · access_requests · oauth_connections · webauthn_credentials · notification_preferences · role_capability_overrides', signal: 'Active (webauthn_credentials dormant)' },
+  { domain: 'Projects & setup', tables: 'projects · project_zones · project_sections · project_team_members · project_documents · anchor_designs · grout_mix_types · grout_mixes · drill_methods · drillers · signatories · caller_project_mappings', signal: 'Active' },
+  { domain: 'Anchor record', tables: 'anchor_install_logs · ground_profile_layers · anchor_test_results · anchor_test_readings · face_photos · anchor_import_jobs · job_briefs · job_brief_documents · variations', signal: 'Active — the geotech core' },
+  { domain: 'DAS (rates & rosters)', tables: 'das_positions · das_home_bases · das_personnel · das_plant · das_project_crew · das_project_plant · das_project_config', signal: 'Active (added 0054, June 2026)' },
+  { domain: 'Forms & safety', tables: 'forms · form_templates · incidents · assets', signal: 'Active (dual incident stores)' },
+  { domain: 'Meetings', tables: 'safety_meetings · safety_meeting_participants · safety_meeting_tasks · safety_meeting_photos', signal: 'Active' },
+  { domain: 'Sites & jobs (older model)', tables: 'sites · site_contacts · site_files · jobs · job_members', signal: 'Partial / semi-legacy' },
+  { domain: 'Drone & spatial', tables: 'drone_surveys · drone_survey_files · point_cloud_jobs · map_annotations · calendar_events', signal: 'Active (point_cloud_jobs partial)' },
+  { domain: 'Reporting', tables: 'reports · report_revisions', signal: 'Active' },
+  { domain: 'Integrations', tables: 'sharepoint_config', signal: 'Active' },
+  { domain: 'Dropped (0055)', tables: '16 aviation_* + 4 council_* + co_pilot_events + co_pilot_settings (+ 7 enums, 9 triggers, 2 functions)', signal: 'Legacy — removed from DB' },
+];
+
+export const envVarGroups: { group: string; names: string[] }[] = [
+  { group: 'Database / storage', names: ['DATABASE_URL', 'SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'SUPABASE_STORAGE_BUCKET', 'SUPABASE_ANON_KEY', 'SUPABASE_SECRET_KEY', 'PGSSLMODE', 'WORK_DIR', 'ARCHIVE_RETENTION_DAYS', 'MIGRATIONS_ASSUME_APPLIED'] },
+  { group: 'Auth / session', names: ['SESSION_SECRET', 'FORM_UPLOAD_SECRET'] },
+  { group: 'AI', names: ['ANTHROPIC_API_KEY', 'OPENAI_API_KEY'] },
+  { group: 'Voice', names: ['TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_PHONE_NUMBER', 'DEEPGRAM_API_KEY', 'ELEVENLABS_API_KEY', 'ELEVENLABS_AGENT_ID', 'ELEVENLABS_WEBHOOK_SECRET', 'VOICE_WEBHOOK_SECRET', 'VOICE_DEFAULT_ORG_ID', 'VOICE_SYSTEM_USER_ID', 'VOICE_DEFAULT_JOB_ID', 'LPC_TWILIO_NUMBER', 'LPC_VOICE_ORG_ID', 'LPC_ELEVENLABS_AGENT_ID', 'LPC_ELEVENLABS_WEBHOOK_SECRET', 'LPC_ELEVENLABS_WEBHOOK_SECRET_2', 'PORT_VOICE_NOTIFICATION_EMAILS'] },
+  { group: 'Email', names: ['RESEND_API_KEY', 'EMAIL_REDIRECT_TO', 'CONTACT_TO_EMAIL'] },
+  { group: 'Microsoft', names: ['MICROSOFT_TENANT_ID', 'MICROSOFT_CLIENT_ID', 'MICROSOFT_CLIENT_SECRET', 'AZURE_TENANT_ID', 'AZURE_CLIENT_ID', 'AZURE_CLIENT_SECRET', 'SHAREPOINT_SITE_ID', 'SHAREPOINT_LIST_ID', 'SHAREPOINT_DRIVE_ID', 'SHAREPOINT_SITE_URL', 'TEAMS_WEBHOOK_URL'] },
+  { group: 'Maps (client)', names: ['VITE_LINZ_API_KEY', 'VITE_LINZ_DATA_KEY', 'VITE_MAPBOX_TOKEN'] },
+  { group: 'Infra / misc', names: ['APP_URL', 'NODE_ENV', 'PORT', 'LOG_LEVEL', 'ALLOWED_ORIGINS', 'FLY_MACHINE_ID', 'RC_ORG_ID', 'CI', 'PLAYWRIGHT_BASE_URL'] },
+];
+
+export const testsInventory = [
+  ['server/__tests__/ai-assistant.test.ts', 'Ask RC assistant behaviour'],
+  ['server/__tests__/ai-drone-analyzer.test.ts', 'Drone image analyzer'],
+  ['server/__tests__/ai-form-extractor.test.ts', 'Voice form field extraction'],
+  ['server/__tests__/analysis-sharepoint-sync.test.ts', 'Analysis → SharePoint sync service'],
+  ['server/__tests__/anchor-import-ai.test.ts', 'Anchor plan import AI parsing'],
+  ['server/routes/__tests__/drone-surveys.test.ts', 'Drone survey routes'],
+  ['server/lib/ai-json-repair.test.ts', 'AI JSON repair helper'],
+  ['server/lib/error-message.test.ts', 'Error message helper'],
+  ['e2e/smoke.spec.ts', 'Playwright smoke test — NOT RUNNABLE (@playwright/test undeclared)'],
+] as const;
+
+export const glossary = [
+  ['Anchor install log', 'The core geotech record: one row per anchor carrying drill, grout and status data (anchor_install_logs).'],
+  ['DAS', 'Daily Activity Sheet — per-shift crew and plant hours; "DAS specs" are the org rate/roster catalogues.'],
+  ['Drill Summary', 'The management review surface over anchor install logs (/anchor-logs).'],
+  ['Face photo', 'A rock-face photograph used as a spatial canvas for anchor pins and annotations.'],
+  ['Feature flag', 'Per-tenant boolean in tenant_config.featureFlags gating navigation items.'],
+  ['JSA / SWMS', 'Job Safety Analysis / Safe Work Method Statement — safety documents with daily sign-ins.'],
+  ['orgType', 'Organisation type enum (engineering, port, + dormant values) that shapes navigation.'],
+  ['PDS', 'Page Definition Sheet — the per-screen specification format used in section 05.'],
+  ['RLS', 'Postgres row-level security — enabled deny-by-default on all public tables.'],
+  ['RockControl', 'The V1 application’s internal product name.'],
+  ['Tenant', 'A customer organisation; one row in organizations + tenant_config, served by a custom domain.'],
+  ['Voice intake', 'The Twilio → ElevenLabs → Claude pipeline that files forms from phone calls.'],
+] as const;

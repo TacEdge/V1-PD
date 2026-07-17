@@ -1,0 +1,20 @@
+stateDiagram-v2
+  direction LR
+  [*] --> planned : anchor planned (manual or AI import)
+  planned --> drilled : drill log completed
+  drilled --> grouted : grout log completed
+  grouted --> tested : test result recorded
+  planned --> notrequired : PM marks not-required
+  drilled --> requiresredrill : redrill flagged
+  requiresredrill --> drilled : redrilled (redrilledFrom link)
+  tested --> [*]
+
+  notrequired : not-required
+  requiresredrill : requires-redrill
+
+  note right of tested
+    Overlays (independent of status):
+    testType none/proof/performance/acceptance/…
+    needsPmReview flag
+    soft delete (deletedAt) → 30-day purge
+  end note

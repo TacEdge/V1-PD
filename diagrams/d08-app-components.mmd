@@ -1,0 +1,34 @@
+flowchart LR
+  subgraph FE["client/src"]
+    PAGES["pages/ (52 files)<br/>route components"]
+    HOOKS["hooks/<br/>useQuery/useMutation home"]
+    COMP["components/<br/>project/ · meetings/ · submissions/ ·<br/>dashboard/ · reports/ · shared/map/ · ui/ (51)"]
+    LIBC["lib/ queryClient · offline-store ·<br/>mapConfig · dashboardTheme"]
+  end
+
+  subgraph SH["shared/"]
+    SCHEMA["schema*.ts — Drizzle tables +<br/>zod insert-schemas"]
+    ENUMS["schema-enums.ts"]
+    RBAC["rbac.ts + rbac-config.ts<br/>(roles · capabilities · nav)"]
+  end
+
+  subgraph BE["server/"]
+    ROUTES["routes/ (~45 modules;<br/>anchor-tests/ anchor-logs/<br/>safety-meetings/ split)"]
+    REPO2["repositories/ repo-*.ts"]
+    SRV["services/ + ai-*.ts analyzers"]
+    VOICE2["voice/ (Twilio/ElevenLabs pipeline)"]
+    LIBS["lib/ logger · ai-json-repair ·<br/>supabase-storage · voice-tenants"]
+    MW["middleware/security.ts"]
+    WRK["workers/"]
+  end
+
+  PAGES --> HOOKS --> LIBC
+  PAGES --> COMP
+  HOOKS -->|fetch /api| ROUTES
+  ROUTES --> REPO2
+  ROUTES --> SRV
+  VOICE2 --> SRV
+  REPO2 --> SCHEMA
+  ROUTES --> RBAC
+  PAGES --> RBAC
+  COMP --> SCHEMA

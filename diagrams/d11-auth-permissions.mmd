@@ -1,0 +1,29 @@
+flowchart TB
+  subgraph Entry["Login paths"]
+    PW["Email + password<br/>(bcrypt, 10 rounds)"]
+    MSO["Microsoft OAuth<br/>(Azure AD, PKCE + JWKS)"]
+    WA["WebAuthn/passkeys —<br/>DORMANT (no server routes)"]
+  end
+
+  SESSION["express-session<br/>Postgres store · 30-day rolling ·<br/>httpOnly · sameSite=lax · secure (prod)"]
+
+  subgraph PerRoute["Per-route middleware (no global RBAC)"]
+    IA["isAuthenticated"]
+    LCU["loadCurrentUser →<br/>req.currentUser.organizationId"]
+    CAP["requireCapability /<br/>requireRoles"]
+  end
+
+  subgraph Resolution["Capability resolution"]
+    MATRIX["Static matrix (shared/rbac.ts)<br/>10 roles × 7 capabilities"]
+    OVR[("role_capability_overrides<br/>per-org, cached 30 s")]
+  end
+
+  ISO["Tenant isolation:<br/>every repository query filters organizationId<br/>from req.currentUser — never from the request body"]
+
+  PW --> SESSION
+  MSO --> SESSION
+  WA -.-> SESSION
+  SESSION --> IA --> LCU --> CAP
+  CAP --> MATRIX
+  CAP --> OVR
+  LCU --> ISO

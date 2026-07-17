@@ -1,0 +1,30 @@
+flowchart TB
+  subgraph Client["Client — React 18 + Vite 5 SPA"]
+    WOUTER["wouter router · TanStack Query 5"]
+    SHAD["shadcn/ui (Radix) + Tailwind"]
+    MAPS["maplibre-gl · three/potree (point clouds)"]
+    OFF["Offline: service worker + IndexedDB (idb)"]
+  end
+
+  subgraph Server["Server — Express 4 + TypeScript (one process)"]
+    SEC["helmet CSP · CORS allowlist · rate limits"]
+    SESS["express-session → Postgres store"]
+    RTS["~45 route modules (per-resource)"]
+    RBACM["RBAC middleware<br/>(capabilities + per-org overrides)"]
+    REPOS["14 repositories (Drizzle ORM)"]
+    SVCS["Services: SharePoint sync · Teams ·<br/>AI analyzers · terrain · email"]
+    VOICEM["Voice module (Twilio↔ElevenLabs WS bridge)"]
+    WORK["Workers: archive-purge (in-process) ·<br/>point-cloud (pg-boss, separate machine)"]
+  end
+
+  subgraph Data["Data — Supabase"]
+    PG[("Postgres (pooler)<br/>62 tables · RLS deny-by-default")]
+    STOR[("Storage bucket (private, signed URLs)")]
+  end
+
+  Client -->|"/api/* (session cookie)"| SEC --> SESS --> RTS --> RBACM --> REPOS --> PG
+  RTS --> SVCS
+  SVCS --> STOR
+  VOICEM --> SVCS
+  WORK --> PG
+  WORK --> STOR

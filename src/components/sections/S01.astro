@@ -1,0 +1,100 @@
+---
+import SectionCover from '../SectionCover.astro';
+import Panel from '../Panel.astro';
+---
+<SectionCover num="01" title="Executive Summary" kicker="What V1 is, in two pages">
+  The shortest honest account of the product as built: what it does, who uses it,
+  where it is strong, and where the evidence runs out.
+</SectionCover>
+
+<h2 id="what-v1-is">What V1 is</h2>
+<p>
+  V1 is <strong>RockControl</strong>: a multi-tenant SaaS web application for construction
+  health &amp; safety, geotechnical anchor work and port operations. One Express + React
+  application on Fly.io serves at least four branded tenants through custom domains —
+  Rock Control (rockcontrol.app), TACEDGE (tacedgepm.com), Lyttelton Port Company
+  (lpcreporting.app) and SteepWorks. It is an installable, offline-capable PWA backed by
+  Supabase Postgres, with AI woven through most workflows (Anthropic Claude for analysis
+  and extraction, Deepgram and ElevenLabs for voice).
+</p>
+<p>
+  The primary problem it addresses is the paper-bound field record: drill and grout logs,
+  anchor tests, daily activity sheets, safety forms and toolbox meetings are captured
+  digitally at or near the point of work, reviewed by a project manager, and exported as
+  XLSX, PDF and formal reports for engineers and clients.
+</p>
+
+<h2 id="product-model">The current product model</h2>
+<p>
+  V1 is <strong>one codebase behaving as three overlapping products</strong>:
+</p>
+<ul>
+  <li><strong>A geotechnical anchor platform</strong> — projects with zones and sections; anchor designs, grout mixes and drill methods configured per project; AI import of anchor plans from PDF; field drill/grout capture; load testing with AI OCR of paper test sheets; drill-log and test exports; an engineer report builder with revisions.</li>
+  <li><strong>A construction H&amp;S system</strong> — dynamic form templates (incidents, near misses, inspections, asset assessments, JSA sign-ins, Take-5s), safety meetings with recording, transcription and AI analysis, an asset register, and voice-first reporting by phone or in-app.</li>
+  <li><strong>A port-operations skin</strong> — the LPC tenant hides geotech operations entirely and relabels the rest into marine terms with a bespoke dashboard.</li>
+</ul>
+<p>
+  Tenancy is data-driven in principle (a <code>tenant_config</code> table carries branding,
+  feature flags and copy overrides) but supplemented in practice by hard-coded per-brand
+  branching in both client and server.
+</p>
+
+<h2 id="users">Current users and surfaces</h2>
+<p>
+  Ten database roles collapse into four navigation groups: Management (OrgAdmin,
+  ProjectManager, HSEManager), Supervisor, Field (FieldTech, Subcontractor) and Viewer
+  (ClientViewer). The product has ~40 registered screens across desktop and a
+  phone-first field experience with a bottom navigation bar, offline drafts and a
+  replayable sync queue. A phone-call voice agent (Twilio → ElevenLabs → Claude
+  extraction) files incident and near-miss forms without the app.
+</p>
+
+<h2 id="demonstrated">What has been demonstrated in live use</h2>
+<p>
+  The repository shows sustained production activity: 56 applied migrations, a deploy
+  pipeline with migration gating (added after a 2026-05-27 outage), per-tenant seeds for
+  LPC and SteepWorks, and a May 2026 senior-dev cleanup that closed all Critical/High
+  security findings. What cannot be shown from the repository is usage volume, which
+  tenants are commercially active, or the reliability of the offline and voice paths in
+  the field — <strong>this inspection did not run the application</strong>, so all runtime
+  behaviour is inferred from code.
+</p>
+
+<h2 id="limitations">Major limitations</h2>
+<ul>
+  <li><strong>Product:</strong> three grouping models coexist (projects, sites, jobs); incidents live in two stores; there is no client/engineer-facing release gate — nothing like a confirmed-only-outward rule exists; six geotech log types advertised in navigation have no implementation.</li>
+  <li><strong>Technical:</strong> no error tracking, APM or metrics (console logs to Fly only); a single shared 1&nbsp;GB VM; webhook and Twilio validation fail open when secrets are unset; startup env validation is written but never invoked; the 500-line and hook-extraction rules have regressed materially (FacePhotoCanvas is 1,753 lines; 124 inline query/mutation call sites).</li>
+  <li><strong>History:</strong> an entire aviation vertical and a database-trigger "Co-Pilot" event stream were built and dropped within months; their residue (roles, org types, nav entries, columns) remains.</li>
+</ul>
+
+<h2 id="posture">Overall technical posture</h2>
+<p>
+  Better than its size suggests, worse than its documentation claims. Security
+  fundamentals are genuinely strong for its stage: RLS on every table with a deploy-time
+  audit, hashed reset tokens, strict CSP, per-org repository-layer tenant isolation, and
+  sanitised AI prompt boundaries. The weaknesses are operational (no observability, no
+  staging evidence, one VM) and structural (tenant-specific branching, duplicated status
+  vocabularies, oversized files, stale docs — the repo's own CLAUDE.md is out of date on
+  several counts).
+</p>
+
+<h2 id="uncertain">What remains uncertain</h2>
+<p>
+  Live usage per tenant; offline reliability in the field; voice-call completion rates;
+  AI extraction accuracy; whether the point-cloud worker machine is actually deployed;
+  and which exports are commercially load-bearing. These are catalogued in
+  section 09 as questions for Mike and Dan.
+</p>
+
+<Panel title="Why V1 is a useful baseline for the V2 decision" tone="quiet">
+  <p>
+    V1 proves the demand-side mechanics the V2 definition depends on: field crews can
+    capture drill/grout/test records digitally, PMs can review and export them, AI can
+    lift paper test sheets and PDF plans into structured data, and multiple real
+    customers have been onboarded onto one codebase. What V1 does <em>not</em> prove is the
+    V2 operating spine — configurable work types, a QA/confirm review lifecycle, and a
+    trusted engineer-facing record. The scoping question is therefore not "does the
+    capability exist?" but "does this implementation carry those concepts, or does it
+    resist them?" — and this package gives the Technical Lead the evidence to answer that.
+  </p>
+</Panel>

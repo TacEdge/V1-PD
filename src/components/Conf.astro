@@ -1,0 +1,6 @@
+---
+// Confidence marker: High / Medium / Low
+interface Props { level: 'High' | 'Medium' | 'Low' }
+const { level } = Astro.props;
+---
+<span class={`conf conf-${level.toLowerCase()}`}>{level}</span>

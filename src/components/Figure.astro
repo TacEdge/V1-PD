@@ -1,0 +1,11 @@
+---
+// Diagram/screenshot figure with ID + caption. SVG sources live in public/diagrams.
+interface Props { id: string; src: string; alt: string; caption: string }
+const { id, src, alt, caption } = Astro.props;
+---
+<figure id={id}>
+  <div class="frame">
+    <img src={src} alt={alt} loading="lazy" />
+  </div>
+  <figcaption><span class="fig-id">{id}</span>{caption}</figcaption>
+</figure>

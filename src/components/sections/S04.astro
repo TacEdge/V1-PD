@@ -1,0 +1,109 @@
+---
+import SectionCover from '../SectionCover.astro';
+import Figure from '../Figure.astro';
+import Panel from '../Panel.astro';
+import Badge from '../Badge.astro';
+---
+<SectionCover num="04" title="Functional Architecture" kicker="How V1 behaves as an operational system">
+  Roles, surfaces, workflows, lifecycles and data flows — of V1 as built. V2 concepts
+  are not used to fill gaps; where V1 has no equivalent of a V2 behaviour, that absence
+  is stated.
+</SectionCover>
+
+<h2 id="context">System context</h2>
+<Figure id="FIG-04-01" src="/diagrams/d01-system-context.svg" alt="System context diagram: users and external services around the RockControl application"
+  caption="V1 system context. One multi-tenant application; eight external service dependencies. Source: diagrams/d01-system-context.mmd." />
+
+<h2 id="roles">User roles and permission boundaries</h2>
+<Figure id="FIG-04-02" src="/diagrams/d02-user-role-map.svg" alt="User and role map from 10 database roles through 4 navigation groups to 7 capabilities"
+  caption="Role model: 10 DB roles → 4 nav groups → 7 capabilities at none/read/write, with per-org overrides. Source: diagrams/d02-user-role-map.mmd." />
+<ul>
+  <li>Permission enforcement is <strong>per-route middleware</strong> (requireCapability / requireRoles) — there is no global RBAC layer. The router itself gates almost nothing; navigation visibility does the front-line shaping.</li>
+  <li>Scoping: ClientViewer and Subcontractor are job/global scoped; PM, SiteSupervisor and FieldTech are project-membership scoped; OrgAdmin and HSEManager see org-wide (server/rbac.ts).</li>
+  <li>Tenant isolation: every repository query filters <code>organizationId</code> taken from the session user — never from the request body.</li>
+</ul>
+
+<h2 id="surfaces">Product surfaces and navigation</h2>
+<Figure id="FIG-04-03" src="/diagrams/d04-navigation.svg" alt="Navigation architecture with top level, project operations, safety and admin groups plus dormant entries"
+  caption="Navigation architecture. ◇ marks opt-in feature-flag items. The dormant Aviation group and six unimplemented log types remain declared in config. Source: diagrams/d04-navigation.mmd." />
+<ul>
+  <li><strong>Desktop:</strong> pinned sidebar navigation driven by NAVIGATION_CONFIG (role group × module × orgType × feature flags × capabilities), with tenant copy overrides.</li>
+  <li><strong>Mobile:</strong> a fixed bottom bar — geotech tenants get Home / This Page / brand / Drill / Voice; the port tenant gets a legacy role-driven four-button layout. A "This Page" sheet exposes per-page actions.</li>
+  <li><strong>Voice:</strong> a sidebar item is a sentinel (<code>__voice__</code>) that opens the in-app voice dialog; the phone agent needs no app at all.</li>
+</ul>
+
+<h2 id="workflow">End-to-end workflow</h2>
+<Figure id="FIG-04-04" src="/diagrams/d03-primary-workflow.svg" alt="Primary workflow from project setup through field capture and review to outputs"
+  caption="The load-bearing V1 workflow: configure → capture → review → export. Source: diagrams/d03-primary-workflow.mmd." />
+
+<h3 id="project-lifecycle">Project lifecycle</h3>
+<p>
+  <code>planned → active → complete</code> with <code>on-hold</code> off-path
+  (project_status enum). Projects are soft-deleted (<code>deletedAt</code>). A project's
+  setup entities and plan usually precede field work, but nothing enforces ordering.
+</p>
+
+<h3 id="anchor-lifecycle">Work-item (anchor) lifecycle</h3>
+<Figure id="FIG-04-05" src="/diagrams/d05-anchor-lifecycle.svg" alt="Anchor status state machine: planned, drilled, grouted, tested with not-required and requires-redrill branches"
+  caption="Anchor status model (anchor_status enum). Status auto-advances from field actions; requires-redrill links a replacement via redrilledFrom. Source: diagrams/d05-anchor-lifecycle.mmd." />
+<Panel title="What V1 does not have" tone="warn">
+  <p>
+    There is <strong>no review-state dimension</strong> (in-progress / submitted / confirmed /
+    re-opened) and no confirmed-only-outward rule. The nearest equivalents are the
+    <code>needsPmReview</code> boolean on anchor logs and the form status lifecycle
+    (draft → pending → approved/rejected → completed → archived), which applies to form
+    submissions, not anchors. Editability is governed by capabilities, not record state.
+    <Badge kind="NOT IMPLEMENTED" />
+  </p>
+</Panel>
+
+<h3 id="record-lifecycle">Record lifecycles and ownership</h3>
+<ul>
+  <li><strong>Forms:</strong> draft → pending → approved / rejected → completed → archived; source is web or voice; JSA sign-ins chain to a parent form.</li>
+  <li><strong>Reports:</strong> a text state machine at the route layer with immutable revision snapshots carrying prepared/reviewed/authorised names.</li>
+  <li><strong>Meetings:</strong> scheduled → recording → processing → completed / cancelled.</li>
+  <li><strong>Ownership:</strong> creator IDs are recorded throughout, but editing rights come from role capabilities — any write-capable user in the org (within project scoping) can edit most records. There is no single-owner-per-state rule.</li>
+  <li><strong>Soft delete:</strong> pervasive <code>deletedAt</code> columns; archived anchor logs hard-purge after 30 days via the in-process worker.</li>
+</ul>
+
+<h2 id="data-flows">Main data flows — capture to report</h2>
+<Figure id="FIG-04-06" src="/diagrams/d06-capture-to-report.svg" alt="Data flow from field device through API and Postgres to review and release outputs"
+  caption="Capture-to-report flow, including the offline replay path and outbound integrations. Source: diagrams/d06-capture-to-report.mmd." />
+
+<h3 id="exceptions">Exceptions and error paths</h3>
+<ul>
+  <li>Field exceptions are operator-declared: issue flags on anchor logs, requires-redrill status, incident/near-miss forms. Voice-submitted incidents and near misses additionally fire Teams notifications.</li>
+  <li>Offline mutations queue in IndexedDB with idempotency IDs; replay retries 5xx up to five times, drops other 4xx, and treats 409 as an already-applied duplicate.</li>
+  <li>Server errors return <code>errMessage(err)</code> with a 500; the client toasts. There is no user-facing error tracking beyond logs.</li>
+</ul>
+
+<h3 id="notifications">Notifications and alerts</h3>
+<ul>
+  <li>Teams webhook cards: variations, voice incidents/near-misses.</li>
+  <li>Email (Resend): auth flows, invites, log-set emails, port voice notifications (<code>PORT_VOICE_NOTIFICATION_EMAILS</code>).</li>
+  <li>Per-user notification_preferences exist; how consistently senders consult them is untraced (<Badge kind="PARTIAL" />).</li>
+  <li>No push notifications, in-app inbox, or SMS.</li>
+</ul>
+
+<h2 id="mobile-desktop">Mobile, desktop and offline behaviour</h2>
+<ul>
+  <li>Layout is locked to dynamic viewport height with body scroll containment for field stability; pull-to-refresh wraps content.</li>
+  <li>Service worker pre-caches form templates, projects, sites and tenant config; a stale-chunk self-heal reloads once on failed lazy imports.</li>
+  <li>Offline: drafts and query cache in IndexedDB; sync queue replays on the <code>online</code> event. Coverage depth by mutation type is not exhaustively traced. <Badge kind="INFERRED" /></li>
+</ul>
+
+<h2 id="customer-logic">Customer-specific logic (functional view)</h2>
+<ul>
+  <li><strong>Port (LPC):</strong> Project Operations hidden; "Departments", "Shift Logs", marine labels; bespoke dashboard; port bottom nav; LPC voice tenant.</li>
+  <li><strong>SteepWorks:</strong> recording disabled; daily sign-in re-pointed; invoice DAS.</li>
+  <li><strong>TACEDGE:</strong> marketing routes and glass theme.</li>
+</ul>
+
+<h2 id="inconsistencies">Inconsistent or unclear behaviour found</h2>
+<ul>
+  <li>Two incident stores (incidents table vs incident-report forms) with separate list surfaces.</li>
+  <li>Three grouping units (projects / sites / jobs) with overlapping meaning.</li>
+  <li>DAS gating by feature flag in one place and orgType in another.</li>
+  <li>Settings page reachable by URL for non-admins (server still enforces; nav hides it).</li>
+  <li>The public form-upload route is registered in both auth branches; its unauthenticated server path needs runtime confirmation.</li>
+</ul>

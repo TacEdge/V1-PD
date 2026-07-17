@@ -1,0 +1,24 @@
+flowchart TB
+  subgraph GH["GitHub"]
+    REPO["danthomson10/RockControl<br/>CI: tsc · eslint · vitest"]
+  end
+
+  subgraph Fly["Fly.io — app 'rockcontrol', region syd"]
+    REL["Release VM<br/>node dist/scripts/migrate.js<br/>(migrations + RLS audit; failure aborts deploy)"]
+    M1["App machine — 1 GB shared CPU<br/>Express serves API + static SPA<br/>min_machines_running = 1, autostop/autostart"]
+    M2["Point-cloud worker machine (2 GB)<br/>pg-boss · PotreeConverter · CloudCompare<br/>(separate deploy — not started by app)"]
+  end
+
+  subgraph SBX["Supabase"]
+    DB[("Postgres via pooler")]
+    STG[("Storage bucket")]
+  end
+
+  DNS["Custom domains:<br/>rockcontrol.app · tacedgepm.com ·<br/>lpcreporting.app (+ steepworks.app in CORS)"]
+
+  REPO -->|fly deploy| REL --> M1
+  DNS --> M1
+  M1 <--> DB
+  M1 <--> STG
+  M2 <--> DB
+  M2 <--> STG

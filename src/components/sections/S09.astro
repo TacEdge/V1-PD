@@ -1,0 +1,77 @@
+---
+import SectionCover from '../SectionCover.astro';
+
+const groups: { title: string; items: string[] }[] = [
+  { title: 'Product intent', items: [
+    'What is the intended relationship between projects, sites and jobs? Three grouping units coexist; is the long-term model project-centric with sites/jobs retired?',
+    'Which incident store is authoritative — the dedicated incidents table or form-based incident reports? Both are routed.',
+    'Was the aviation vertical abandoned permanently, or might it return? It was fully built (migrations 0005–0012) then dropped (0055) within months; roles, org types and nav config remain.',
+    'What was Co-Pilot ("the brain") meant to become? Trigger-based event streaming was built and dropped within weeks.',
+  ]},
+  { title: 'Customer use', items: [
+    'Which tenants are commercially active today, and at what volume? The repository cannot show usage.',
+    'Is the LPC engagement ongoing? Substantial port-specific behaviour is carried in the core codebase.',
+    'What is the status of the SteepWorks pilot ("pilot starts 25 May 2026" in a CSP comment)? Did it convert?',
+    'Is Groundline Civil (the V2 beachhead partner) a V1 user? No Groundline configuration was found in V1.',
+  ]},
+  { title: 'User roles', items: [
+    'Are ClientViewer accounts actually issued to engineers/clients? The role exists; no designed engineer surface does.',
+    'Who uses the Subcontractor role, and how does it differ from FieldTech in practice? The capability matrix treats them identically.',
+  ]},
+  { title: 'Production behaviour', items: [
+    'Has offline capture been verified end-to-end in the field? The sync queue exists; no test covers replay; runtime is UNVERIFIED here.',
+    'Is the point-cloud worker machine deployed? Nothing in the repo confirms one exists.',
+    'What are real voice-call completion rates on the Twilio/ElevenLabs pipeline?',
+    'How often do AI extractions (voice forms, test-sheet OCR, plan import) need correction? Accuracy decides whether these are capabilities or assisted drafts.',
+  ]},
+  { title: 'Reporting', items: [
+    'Are Report Builder reports actually issued to clients? The revision/signatory model implies formal issue.',
+    'Which export (XLSX drill log, test PDF, DAS invoice) is the commercially load-bearing deliverable per tenant?',
+  ]},
+  { title: 'Data', items: [
+    'How much production data sits in the semi-legacy tables (sites, jobs, take-5-era forms)? This sizes any V2 migration.',
+    'Are inline data-URL attachments (notes, test photos) materially large? They bypass the storage model.',
+    'What backup/recovery arrangements exist beyond Supabase defaults? None are evidenced in the repository.',
+  ]},
+  { title: 'Security', items: [
+    'Are all webhook secrets and TWILIO_AUTH_TOKEN set in production? Validators fail open when unset.',
+    'Has attached_assets/ (107 files of pasted logs and customer documents) been reviewed for sensitive content?',
+    'What is the intent of the @rockcontrol.app email-verification bypass (server/routes/auth.ts:146)?',
+    'Is the single Supabase bucket confirmed private, and are legacy public-URL callers gone?',
+  ]},
+  { title: 'Infrastructure', items: [
+    'Is one shared 1 GB VM adequate for current load, given 5-minute AI request timeouts? No metrics exist.',
+    'What is the environment story? No staging is evident — how are changes verified before production?',
+    'Where do secrets live and how are they rotated? Confirm docs/secret-rotation.md reflects practice.',
+  ]},
+  { title: 'Technical debt', items: [
+    'Are the 500-line and hook-extraction rules still policy? Violations have regrown past documented refactors with lint suppressions.',
+    'Should the e2e harness be revived? Playwright config exists but the dependency was never declared.',
+  ]},
+  { title: 'Customer-specific logic', items: [
+    'Which port/LPC behaviours are product capabilities vs one-off customisation for V2 scoping purposes?',
+    'Should the TACEDGE marketing site remain inside the product SPA?',
+  ]},
+  { title: 'V1-to-V2 scoping implications', items: [
+    'Which V1 capabilities are contractually load-bearing for existing customers during any transition (voice intake, DAS invoicing, SharePoint sync)?',
+    'Is the V2 review model (submitted → confirmed → engineer visibility) intended to replace V1’s status + needsPmReview model? V1 has no confirmed-only-outward gate today.',
+    'Does V2 inherit the Supabase/Fly/Express stack, or is the platform choice open? This determines V1 reuse.',
+    'Which tenants must migrate to V2, and which can remain on V1? Multi-tenant coupling is the largest structural difference from the V2 single-workspace definition.',
+  ]},
+];
+---
+<SectionCover num="09" title="Open Questions" kicker="Validation required — investigated first, asked second">
+  Only questions that materially affect understanding of V1 or the V2 scoping decision,
+  raised after inspection could not resolve them. The same list ships as
+  evidence/V1_Open_Questions_and_Validation_Required.md. Directed to Mike / Dan unless
+  noted.
+</SectionCover>
+
+{groups.map((g, gi) => (
+  <section>
+    <h2 id={`q-${g.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>{g.title}</h2>
+    <ol start={groups.slice(0, gi).reduce((n, x) => n + x.items.length, 1)}>
+      {g.items.map((q) => <li>{q}</li>)}
+    </ol>
+  </section>
+))}

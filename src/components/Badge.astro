@@ -1,0 +1,7 @@
+---
+// Evidence-classification badge. `kind` is one of the classification terms.
+interface Props { kind: string }
+const { kind } = Astro.props;
+const slug = kind.toLowerCase().replace(/\s+/g, '-');
+---
+<span class={`badge badge-${slug}`} data-class={slug}>{kind}</span>

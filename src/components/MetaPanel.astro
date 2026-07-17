@@ -1,0 +1,13 @@
+---
+// Structured metadata panel, per the V2 reference document pattern.
+interface Props { items: { label: string; value: string }[] }
+const { items } = Astro.props;
+---
+<dl class="meta-panel">
+  {items.map((it) => (
+    <div>
+      <dt>{it.label}</dt>
+      <dd set:html={it.value} />
+    </div>
+  ))}
+</dl>

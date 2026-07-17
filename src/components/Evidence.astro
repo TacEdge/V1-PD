@@ -1,0 +1,9 @@
+---
+// Expandable technical-evidence disclosure. Prints expanded.
+interface Props { title?: string }
+const { title = 'Evidence' } = Astro.props;
+---
+<details class="evidence">
+  <summary>{title}</summary>
+  <div class="evidence-body"><slot /></div>
+</details>

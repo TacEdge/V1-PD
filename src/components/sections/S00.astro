@@ -1,0 +1,113 @@
+---
+import SectionCover from '../SectionCover.astro';
+import MetaPanel from '../MetaPanel.astro';
+import Panel from '../Panel.astro';
+import Badge from '../Badge.astro';
+import { BASELINE } from '../../data/site';
+---
+<SectionCover num="00" title="Read First" kicker="TACEDGE · V1 Product Definition · As-built">
+  What this package is, how it was produced, and how far to trust it. Read this
+  section before relying on any claim in the sections that follow.
+</SectionCover>
+
+<MetaPanel items={[
+  { label: 'Status', value: BASELINE.edition },
+  { label: 'Class', value: BASELINE.classification },
+  { label: 'Product', value: 'TACEDGE Ground Engineering V1 ("RockControl")' },
+  { label: 'Evidence source', value: `${BASELINE.v1Repo} @ <code>${BASELINE.v1ShaShort}</code>` },
+  { label: 'Inspection date', value: BASELINE.inspectionDate },
+  { label: 'Audience', value: 'Interim Development Technical Lead · founders' },
+]} />
+
+<h2 id="purpose">Purpose</h2>
+<p>
+  This is an <strong>as-built product definition of TACEDGE Ground Engineering V1</strong> —
+  the production application known in its own repository as RockControl. It was produced
+  for the incoming Interim Development Technical Lead to use during the 30-hour V2
+  technical scoping sprint. It describes what V1 <em>is</em>, not what it should become:
+  it is not a redesign, a V2 architecture recommendation, or a roadmap.
+</p>
+
+<h2 id="baseline">Repository baseline</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Item</th><th>tacedge-v1-PD (this site)</th><th>TACEDGE Geotech (evidence source)</th></tr></thead>
+  <tbody>
+    <tr><td>Role</td><td>Writable output repository</td><td><strong>Read-only</strong> evidence source</td></tr>
+    <tr><td>Branch</td><td><code>{BASELINE.pdBranch}</code></td><td><code>{BASELINE.v1Branch}</code></td></tr>
+    <tr><td>Commit inspected</td><td>—</td><td><code>{BASELINE.v1Sha}</code></td></tr>
+    <tr><td>Commit date</td><td>—</td><td>{BASELINE.v1CommitDate} (merge of PR #222)</td></tr>
+  </tbody>
+</table></div>
+
+<Panel title="Repository safety boundary" tone="quiet">
+  <p>
+    tacedge-v1-PD is the only writable repository. TACEDGE Geotech was inspected as a
+    read-only evidence source. No intentional changes were made to the TACEDGE Geotech
+    repository — no files created or edited, no packages installed, no branches, commits,
+    migrations or configuration changes. <code>git status</code> was verified clean in
+    TACEDGE Geotech before and after the work.
+  </p>
+</Panel>
+
+<h2 id="methodology">Evidence methodology</h2>
+<p>Findings were derived in this order of authority:</p>
+<ol>
+  <li>Current database schema and migrations (<code>shared/schema*.ts</code>, <code>migrations/</code>).</li>
+  <li>Active routes, pages, components, services and application logic.</li>
+  <li>Tests, fixtures and seed data.</li>
+  <li>Deployment and infrastructure configuration (<code>fly.toml</code>, Dockerfile, CI).</li>
+  <li>README and current technical documentation.</li>
+  <li>Git history where needed to explain the present state.</li>
+  <li>Code comments and internal naming.</li>
+  <li>Inference from multiple consistent technical signals.</li>
+</ol>
+<p>
+  The V2 Product Definition PDF (in <code>reference/</code>) was used for <strong>format and
+  comparison context only</strong>. No V2 claim has been treated as evidence of V1 behaviour.
+</p>
+
+<Panel title="The application was not run" tone="warn">
+  <p>
+    V1 could not be run safely during this inspection: it requires a Supabase Postgres
+    database, a session secret and eight external API keys, none of which were available,
+    and installing dependencies or environment files into TACEDGE Geotech was prohibited.
+    <strong>Every runtime-behaviour claim in this package is therefore INFERRED from code or
+    marked UNVERIFIED, and no screenshots of the live product exist here.</strong> Screen
+    descriptions are reconstructed from route registrations, page components and
+    navigation configuration.
+  </p>
+</Panel>
+
+<h2 id="classifications">Evidence classifications</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Label</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><Badge kind="IMPLEMENTED" /></td><td>Demonstrably present and functioning in the current codebase.</td></tr>
+    <tr><td><Badge kind="PARTIAL" /></td><td>Present but incomplete, constrained, inconsistent or not fully connected.</td></tr>
+    <tr><td><Badge kind="DORMANT" /></td><td>Code, schema or interface exists but does not appear active.</td></tr>
+    <tr><td><Badge kind="INFERRED" /></td><td>Strongly suggested by the implementation but not directly confirmed.</td></tr>
+    <tr><td><Badge kind="UNVERIFIED" /></td><td>Could not be validated from the repository or safe access.</td></tr>
+    <tr><td><Badge kind="NOT IMPLEMENTED" /></td><td>Clearly absent, where absence is relevant.</td></tr>
+    <tr><td><Badge kind="LEGACY" /></td><td>Retained code, routes, models or assets no longer part of the active product.</td></tr>
+  </tbody>
+</table></div>
+<p>
+  Confidence is stated as <span class="conf conf-high">High</span> /
+  <span class="conf conf-medium">Medium</span> / <span class="conf conf-low">Low</span>
+  on registers and sheets. Where confidence is not High, the validation needed is stated.
+</p>
+
+<h2 id="how-to-use">How to use this site</h2>
+<ul>
+  <li>Sections 01–02 orient you on the product. Section 03 is the capability register. Sections 04–07 are the functional, screen, design and technical detail. Section 08 maps V1 to the V2 reference. Sections 09–10 hold open questions and appendices.</li>
+  <li>Machine-readable evidence lives in <code>evidence/*.csv</code> in the tacedge-v1-PD repository — the same data that backs the tables here.</li>
+  <li>Diagrams are Mermaid sources in <code>diagrams/*.mmd</code>, rendered to SVG by <code>diagrams/render.sh</code> — edit the source and re-render.</li>
+  <li>Search (top of the sidebar area on built sites) and the capability filters are progressive enhancements; all content works without JavaScript.</li>
+</ul>
+
+<h2 id="printing">How to print the complete package</h2>
+<ol>
+  <li>Open <a href="/print">/print</a> (also linked from every page as “Print Product Definition”).</li>
+  <li>Use the browser print dialog (Chromium recommended): A4, portrait, default margins off (the stylesheet sets 16–20&nbsp;mm), background graphics <strong>on</strong>.</li>
+  <li>Save as PDF. The route renders cover, contents and sections 00–10 in order with print-specific styling.</li>
+</ol>

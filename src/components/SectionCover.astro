@@ -1,0 +1,10 @@
+---
+// Numbered section cover block, per the V2 reference document pattern.
+interface Props { num: string; title: string; kicker?: string }
+const { num, title, kicker } = Astro.props;
+---
+<header class="section-cover">
+  {kicker && <p class="kicker">{kicker}</p>}
+  <h1><span class="section-number">{num}</span> · {title}</h1>
+  <p><slot /></p>
+</header>

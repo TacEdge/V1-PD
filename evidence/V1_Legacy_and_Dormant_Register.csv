@@ -1,0 +1,25 @@
+Item ID,Item,Type,Classification,What it is,Evidence,Removal risk / notes
+LD-01,Aviation module tables + enums,Database,LEGACY (dropped),22 aviation_*/council_* tables and 7 enums built for a CAA/council consent vertical (migrations 0005-0012); dropped in 0055,migrations/0005-0012; 0055_drop_aviation_council_copilot.sql,Already dropped from DB; history only
+LD-02,Aviation nav entries,Client config,LEGACY,10 aviation nav items still declared in NAVIGATION_CONFIG with no registered routes,shared/rbac-config.ts:113-148,Safe to delete; unreachable (module flag off for all tenants)
+LD-03,Aviation-era roles,Database enum,DORMANT,Pilot / CouncilApprover / CouncilAdmin remain in user_role enum and RBAC matrix,shared/schema-enums.ts; shared/rbac.ts,Enum values hard to drop in Postgres; kept deliberately
+LD-04,operator/council org types,Database enum,DORMANT,org_type values for the removed aviation verticals,shared/schema-enums.ts,Same enum-drop constraint
+LD-05,Co-Pilot event stream,Database,LEGACY (dropped),co_pilot_events/settings + 9 triggers + 2 functions (migrations 0047-0049); dropped in 0055,migrations/0047-0049; 0055,safety_meetings.planned_work column survives
+LD-06,admin-users.tsx,Client page,DORMANT,224-line user-admin table never imported into the router,client/src/pages/admin-users.tsx,User management lives in Settings; safe delete candidate
+LD-07,take-5-form.tsx,Client page,LEGACY,Hard-coded Take-5 form superseded by dynamic form templates; no imports,client/src/pages/take-5-form.tsx,Safe delete candidate
+LD-08,Geotech log placeholder nav items,Client config,NOT IMPLEMENTED,soil-nail-logs / shotcrete-logs / borehole-logs / instrumentation / slope-monitoring / lab-testing nav entries behind opt-in flags with no route components,shared/rbac-config.ts,Enabling a flag routes users to NotFound
+LD-09,drone-ai.ts + drone-surveys.ts route stubs,Server,DORMANT,Two small route files never imported in routes.ts (drone functionality lives in surveys.ts/survey-*.ts),server/routes/drone-ai.ts; drone-surveys.ts,Safe delete candidates
+LD-10,WebAuthn,Auth,DORMANT,Packages + webauthn_credentials table with no registered server endpoints,package.json; shared/schema-auth.ts:66,Decide: wire up or remove
+LD-11,Structured voice mode,Server,LEGACY,Old structured extraction branch kept for back-compat while old prompt version is in production,server/voice/voice.ts:359,Remove once agent prompts migrated
+LD-12,Legacy webhook aliases,Server,LEGACY,/elevenlabs-webhook and /conversationend aliases retained for LPC dashboard-configured URLs,server/voice/voice.ts,Retire after LPC webhook URLs are updated
+LD-13,components/examples/,Client,DORMANT,9 scaffolding/demo component copies with no route references,client/src/components/examples/,Safe delete candidates
+LD-14,__ai_chat__ bottom-nav branch,Client,DORMANT,No-op branch for the removed aviation AI chat,client/src/components/mobile-bottom-nav.tsx:231-235,Safe delete
+LD-15,Debug/one-off scripts,Repo,LEGACY,Committed LPC/SharePoint/debug scripts (list-lpc-admins.ts; seed-lpc-via-ipv6.ts; test-create-incident.ts; fix-unused-imports.mjs; …) + server/scripts/__pycache__,scripts/; server/scripts/,CLAUDE.md itself warns these should not be committed
+LD-16,attached_assets/,Repo,LEGACY,107 files: pasted debug logs (Twilio call SIDs; voice prompts; diffs) + customer reference documents,attached_assets/,Needs an owner security/PII review; excluded from this PD
+LD-17,design_guidelines.md,Docs,LEGACY,Describes a defunct 'Rock Red' Material identity that contradicts the shipped green TacEdge build,design_guidelines.md; client/src/lib/dashboardTheme.ts,Misleads new contributors
+LD-18,WEBHOOK_CONFIG.md Replit URL,Docs,LEGACY,Stale Replit dev URL listed alongside production webhooks,WEBHOOK_CONFIG.md,Doc refresh needed
+LD-19,Sites model,Product,PARTIAL/LEGACY,Pre-project operating model (sites/site_contacts/site_files) still routed and navigable,shared/schema.ts:971; client/src/pages/sites.tsx,Clarify future vs projects
+LD-20,Jobs model,Product,PARTIAL/LEGACY,Older H&S grouping unit (jobs/job_members) overlapping with projects,shared/schema.ts:1033,Clarify future vs projects
+LD-21,server/lib/config.ts,Server,DORMANT,Zod env validator never called at boot,server/lib/config.ts,Wire it up or remove
+LD-22,caller_project_mappings + VOICE_DEFAULT_JOB_ID,Voice,PARTIAL,Older single-tenant voice routing fallbacks largely superseded by per-tenant config,server/lib/voice-tenants.ts; shared/schema.ts:448,Confirm still needed
+LD-23,dashboardTheme.ts dead aliases,Client,LEGACY,Legacy palette keys (red/slate/orange/green) all alias one base so old callers compile,client/src/lib/dashboardTheme.ts,Cleanup candidate
+LD-24,@playwright/test gap,Tooling,PARTIAL,Playwright config + e2e spec exist but the package is not declared; no test:e2e script,playwright.config.ts; e2e/smoke.spec.ts,E2E not runnable as-is

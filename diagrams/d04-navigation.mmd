@@ -1,0 +1,45 @@
+flowchart TB
+  ROOT["App shell<br/>sidebar (desktop) · bottom nav (mobile)"]
+
+  subgraph Top["Top level"]
+    DASH["/  Dashboard"]
+    PRJ["/projects  (port: 'Departments')"]
+  end
+
+  subgraph Ops["Project Operations (hidden for port orgType)"]
+    DRL["/drill"]
+    ALG["/anchor-logs (Drill Summary)"]
+    ATS["/anchor-testing ◇"]
+    DAS["/daily-activity"]
+    VAR["/variations ◇"]
+    DOC["/documents ◇"]
+    CAL["/calendar ◇"]
+    NTS["/notes"]
+  end
+
+  subgraph Safety["Safety"]
+    VOICE["Voice report (dialog)"]
+    MTG["/meetings"]
+    INC["/incidents"]
+    NM["/near-misses"]
+    SI["/site-inspections"]
+    AA["/asset-assessments"]
+    AST["/assets"]
+  end
+
+  subgraph Admin["Admin"]
+    FRM["/forms"]
+    SUB["/submissions"]
+    FB["/form-builder"]
+    SET["/settings (canManageUsers)"]
+  end
+
+  subgraph Dormant["Declared in nav config — no routes"]
+    AV["Aviation module (10 items) — LEGACY"]
+    GL["Soil nails · shotcrete · boreholes ·<br/>instrumentation · slope monitoring · lab testing ◇ — NOT IMPLEMENTED"]
+  end
+
+  ROOT --> Top --> Ops
+  Top --> Safety
+  Top --> Admin
+  ROOT -.-> Dormant

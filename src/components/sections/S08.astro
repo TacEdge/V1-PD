@@ -1,0 +1,115 @@
+---
+import SectionCover from '../SectionCover.astro';
+import Panel from '../Panel.astro';
+---
+<SectionCover num="08" title="V1 → V2 Orientation" kicker="A navigation aid — not the delta assessment">
+  For each major product area: what V1 has (from this package's evidence), what the V2
+  reference proposes (from the V2 Product Definition PDF), the primary nature of the
+  difference, and the questions the Technical Lead must answer. This section does not
+  decide extend vs refactor vs rebuild.
+</SectionCover>
+
+<Panel title="How to read this" tone="quiet">
+  <p>V1 claims cite this package's evidence base (TACEDGE Geotech @ 975a2ea). V2 claims
+  come only from TACEDGE_Ground_Engineering_V2.0_Product_Definition.pdf. Neither is
+  evidence of the other.</p>
+</Panel>
+
+<div class="table-wrap"><table>
+  <thead><tr>
+    <th style="min-width:8rem">Area</th><th>V1 (as built)</th><th>V2 (as proposed)</th><th>Difference is primarily</th><th>Technical Lead must answer</th>
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td>Product boundary</td>
+      <td>One multi-vertical, multi-tenant app: geotech + H&amp;S + port skin + marketing site.</td>
+      <td>One Operational Workspace (B1) for ground engineering on a TACEDGE platform; six-work-type catalogue.</td>
+      <td>Product scope · platform configuration</td>
+      <td>Does V2 carve the workspace out of V1, or start beside it? What happens to port/H&amp;S tenants?</td>
+    </tr>
+    <tr>
+      <td>Work types</td>
+      <td>Anchors hard-coded end-to-end; piling/drilling/shotcrete etc. absent (six nav placeholders unimplemented).</td>
+      <td>Work type = completion-criteria configuration on one spine; anchoring + piling proven in V2.0; four more onboard as config.</td>
+      <td>Data model · architecture</td>
+      <td>Can anchor_install_logs generalise to a work-item abstraction, or is that a new core?</td>
+    </tr>
+    <tr>
+      <td>Status &amp; review model</td>
+      <td>Single anchor status enum (planned→drilled→grouted→tested + off-path) + needsPmReview flag; form statuses separate; no review lifecycle.</td>
+      <td>Two lifecycle dimensions (work phase + review state: in-progress→submitted→confirmed→re-opened) with testing and freshness overlays; single-owner editability per state; confirmed-only-outward.</td>
+      <td>Workflow · data model</td>
+      <td>Is the review dimension additive to V1's schema, or does it force re-modelling of logs and forms?</td>
+    </tr>
+    <tr>
+      <td>Engineer (client) surface</td>
+      <td>ClientViewer role with read capabilities; no designed engineer view; exports are emailed files.</td>
+      <td>A glance-first engineer view of confirmed records only; QA queue feeding it; closeout package from the live record.</td>
+      <td>Product scope · user experience</td>
+      <td>What must exist server-side (state, permissions, release gate) before an engineer view is honest?</td>
+    </tr>
+    <tr>
+      <td>PM status views</td>
+      <td>Drill Summary table + dashboards; face-photo anchor map (pins on photos); MapLibre project map.</td>
+      <td>Status Board (schematic by zone) + Spatial Map (work items on an uploaded site image); three layers: inform / act / release.</td>
+      <td>User experience</td>
+      <td>Do the face-photo canvas and zone model satisfy the Status Board/Spatial Map jobs, or is that surface new?</td>
+    </tr>
+    <tr>
+      <td>Safety / sign-on</td>
+      <td>JSA sign-ins recorded against parent forms; nothing gates drilling; full H&amp;S suite (meetings, incidents, inspections) beyond V2's scope.</td>
+      <td>Daily JSA/SWMS sign-on with finger signature gates drill-log start (the one enforced barrier); incident/near-miss in &lt;60 s.</td>
+      <td>Workflow</td>
+      <td>Where does the gate live (client, API, both) and does V1's form model support it? What of V1's wider H&amp;S suite does V2 keep?</td>
+    </tr>
+    <tr>
+      <td>Offline</td>
+      <td>Service worker + IndexedDB sync queue with idempotency and retry; depth of coverage untested; runtime unverified.</td>
+      <td>DoD-level: a full shift with no signal and nothing lost on resync; offline-available project reference documents.</td>
+      <td>Reliability</td>
+      <td>Test V1's queue against the full-shift standard; decide if it is a foundation or a liability.</td>
+    </tr>
+    <tr>
+      <td>AI assistance</td>
+      <td>Broad: plan import, test OCR + conformance, incident/meeting/drone analysis, report proposals, voice extraction, map chat, Ask RC.</td>
+      <td>Narrow and disciplined: PDF plan import and test-record conversion, human-approved; voice transcription a Should.</td>
+      <td>Product scope</td>
+      <td>Which V1 AI features earn a place in V2's propose-approve-commit discipline; which are demos to retire?</td>
+    </tr>
+    <tr>
+      <td>Documents</td>
+      <td>Two surfaces: per-project uploads (Supabase) and a SharePoint browser (Graph).</td>
+      <td>A bounded project reference folder, offline-available, deliberately not a DMS; JSA/SWMS kept separate under sign-on.</td>
+      <td>Product scope · user experience</td>
+      <td>Consolidate to one document model? Does SharePoint remain a customer requirement?</td>
+    </tr>
+    <tr>
+      <td>Daily records</td>
+      <td>DAS with org rate cards (positions/personnel/plant), PDF + invoice XLSX.</td>
+      <td>Resourcing sheet: crew and plant hours, auto-totalled, exported; pay/invoice computation is roadmap.</td>
+      <td>Product scope</td>
+      <td>V1 already exceeds V2 here — does V2 adopt DAS specs as-is?</td>
+    </tr>
+    <tr>
+      <td>Voice</td>
+      <td>Full phone agent (Twilio/ElevenLabs) + in-app dictation, in production for incident-type forms.</td>
+      <td>Voice transcription for notes is a V2.0 Should; no phone agent in scope.</td>
+      <td>Product scope</td>
+      <td>Is the phone agent a retained V1 service, a V2 differentiator, or out of the workspace entirely?</td>
+    </tr>
+    <tr>
+      <td>Reporting</td>
+      <td>XLSX/PDF exports + Tiptap report builder with revisions and AI proposals; emailed delivery.</td>
+      <td>Reporting as release: confirmed records reach the engineer; closeout assembled from the live record.</td>
+      <td>Workflow · reporting</td>
+      <td>Does the report builder become the closeout tool, or does release-from-record replace document assembly?</td>
+    </tr>
+    <tr>
+      <td>Platform &amp; ops</td>
+      <td>Express/Supabase/Fly monolith, one VM, no observability, production-only, SQL migrations with RLS audit.</td>
+      <td>Technical &amp; Data Architecture artefact defines data/identity/state/interfaces; Operational Data Contract seam; coordination-readiness kept reachable.</td>
+      <td>Architecture · reliability</td>
+      <td>Stack continuity; where the Operational Data Contract would sit relative to V1's schema; minimum ops baseline for V2.</td>
+    </tr>
+  </tbody>
+</table></div>
