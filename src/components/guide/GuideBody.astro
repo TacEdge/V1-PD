@@ -1,0 +1,357 @@
+---
+import SectionCover from '../SectionCover.astro';
+import MetaPanel from '../MetaPanel.astro';
+import Panel from '../Panel.astro';
+import Shot from '../Shot.astro';
+import WorkflowSection from '../WorkflowSection.astro';
+import { BASELINE } from '../../data/site';
+import { workflows, atlas } from '../../data/workflows';
+
+interface Props { print?: boolean }
+const { print = false } = Astro.props;
+const P1 = workflows.filter((w) => w.priority === 1);
+const P2 = workflows.filter((w) => w.priority === 2);
+const P3 = workflows.filter((w) => w.priority === 3);
+const brk = print ? 'print-section-break' : '';
+const wfLimits: Record<string, string> = {
+  'WF-01': 'In-app brand leakage (RV-12)', 'WF-02': 'Setup spread across tabs', 'WF-03': 'AI import blocked',
+  'WF-04': 'Project select first; dual paths', 'WF-05': 'Offline not exercised', 'WF-06': 'Redrill path not exercised',
+  'WF-07': 'OCR + report PDF AI-blocked', 'WF-08': 'No confirm gate', 'WF-09': 'Test PDF AI-gated; email not sent',
+  'WF-10': 'Invoice XLSX not rendered', 'WF-11': 'Drilling not gated on sign-in', 'WF-12': 'Two incident stores; AI blocked',
+  'WF-13': 'Extraction blocked', 'WF-14': 'Recording/AI blocked', 'WF-15': 'Unstructured jsonb', 'WF-16': 'No tiles',
+  'WF-17': '—', 'WF-18': 'RBAC tab shallow', 'WF-19': 'Un-zodded config', 'WF-20': 'SharePoint absent',
+  'WF-23': 'Worker blocked', 'WF-24': 'Outlook blocked',
+};
+---
+<!-- 00 READ FIRST -->
+<section class={brk} id="g00">
+<SectionCover num="00" title="Read First" kicker="Screenshots & Workflow Guide · runtime companion">
+  The visual, runtime-observed companion to the V1 Product Definition. It shows what
+  V1 looks like and how its workflows behave, captured from a safely run instance of
+  the application.
+</SectionCover>
+
+<MetaPanel items={[
+  { label: 'Artefact', value: 'V1 Screenshots & Workflow Guide' },
+  { label: 'Companion to', value: 'TACEDGE Ground Engineering V1 Product Definition' },
+  { label: 'Runtime', value: 'Local disposable instance · RockControl tenant' },
+  { label: 'Data', value: 'Fictional / seeded — no production data' },
+  { label: 'Evidence source', value: `${BASELINE.v1Repo} @ <code>${BASELINE.v1ShaShort}</code>` },
+  { label: 'Inspection date', value: BASELINE.inspectionDate },
+]} />
+
+<h2 id="g-purpose">Purpose &amp; audience</h2>
+<p>
+  This guide exists to let the incoming Interim Development Technical Lead <em>see</em> V1
+  during the V2 scoping sprint: what the screens look like, how a field crew member,
+  supervisor and project manager move through the core
+  <strong>configure → capture → review → export</strong> chain, and where observed runtime
+  behaviour differs from the static Product Definition. It does not repeat the Product
+  Definition's full technical detail — it is the picture that sits beside it.
+</p>
+
+<Panel title="How this runtime was obtained (safety boundary)" tone="quiet">
+  <p>
+    tacedge-v1-PD is the only writable repository. TACEDGE Geotech was inspected as a
+    strictly read-only evidence source; no intentional changes were made to it. The
+    application was run from a <strong>disposable copy of the tracked source</strong> (commit
+    <code>{BASELINE.v1ShaShort}</code>) outside both repositories, against a local
+    throwaway PostgreSQL seeded with <strong>fictional data</strong> (project "Riverview Cutting
+    Stabilisation", client "Alpine Hydro Ltd"). No external service was configured, so no
+    email, Teams, SharePoint, voice call or notification could be sent. All accounts are
+    fictional fixtures. No credentials appear in this repository.
+  </p>
+</Panel>
+
+<h2 id="g-classifications">Observation classifications</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Chip</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><span class="rt rt-observed">OBSERVED</span></td><td>Directly seen in the running application.</td></tr>
+    <tr><td><span class="rt rt-observed-read-only">OBSERVED — READ ONLY</span></td><td>Seen; no write action performed.</td></tr>
+    <tr><td><span class="rt rt-observed-test-data">OBSERVED — TEST DATA</span></td><td>Completed using the approved local test data.</td></tr>
+    <tr><td><span class="rt rt-partially-observed">PARTIALLY OBSERVED</span></td><td>Part seen; a dependency or safety boundary blocked completion.</td></tr>
+    <tr><td><span class="rt rt-blocked">BLOCKED</span></td><td>Could not be inspected (access, integration or safety constraint).</td></tr>
+    <tr><td><span class="rt rt-contradicted">CONTRADICTED</span></td><td>Runtime materially differs from the Product Definition.</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="g-limits">Known limitations of this runtime</h2>
+<ul>
+  <li>One tenant only (RockControl). LPC port, SteepWorks and TACEDGE-brand experiences are BLOCKED — no local data/domains.</li>
+  <li>No AI keys: plan import, test-sheet OCR, the engineering test-report PDF, meeting analysis, voice extraction and Ask RC are BLOCKED.</li>
+  <li>No map tiles (no LINZ/Mapbox key); no external send (email/Teams/SharePoint/voice).</li>
+  <li>Dev server, not the production build; small seeded data volume — not a performance sample.</li>
+</ul>
+
+<h2 id="g-use">How to use &amp; print</h2>
+<p>
+  Read the Visual Executive Summary, then the core workflows (WF-01 to WF-10). The
+  Screen Atlas is a reference grid; Runtime Validation Findings records where runtime met
+  or diverged from the Product Definition. Print the landscape package from
+  <a href="/v1-screenshots-workflows/print">/v1-screenshots-workflows/print</a> — browser
+  print dialog, A4 <strong>landscape</strong>, background graphics on, save as PDF.
+</p>
+</section>
+
+<!-- 01 VISUAL EXECUTIVE SUMMARY -->
+<section class={brk} id="g01">
+<SectionCover num="01" title="Visual Executive Summary" kicker="What V1 looks like, in one glance">
+  The main surfaces and the load-bearing workflow, directly observed.
+</SectionCover>
+<p>
+  V1 runs. From a fresh sign-in it presents a role-adaptive dashboard, a tabbed project
+  workspace, a status-coloured anchor plan, a phone-first drill capture screen that
+  inherits design presets, a testing register with pass/fail conformance, a Drill Summary
+  review table, and a report builder with a live multi-page PDF. The
+  <strong>configure → capture → review → export</strong> chain is real and legible.
+</p>
+<div class="strip">
+  <Shot file="/screenshots/v1-workflows/WF-01-S02-dashboard-admin-desktop.png" caption="Configure/monitor — the role-adaptive dashboard." cls="OBSERVED — TEST DATA" />
+  <Shot file="/screenshots/v1-workflows/WF-03-S01-anchor-plan-desktop.png" caption="Configure — the schematic Anchor Plan." cls="OBSERVED — TEST DATA" />
+  <Shot file="/screenshots/v1-workflows/WF-05-S03-drill-capture-dialog-desktop.png" caption="Capture — drill dialog with design presets inherited." cls="OBSERVED — TEST DATA" />
+</div>
+<div class="strip">
+  <Shot file="/screenshots/v1-workflows/WF-08-S01-drill-summary-desktop.png" caption="Review — Drill Summary (note the empty Review column: no confirm gate)." cls="OBSERVED — TEST DATA" />
+  <Shot file="/screenshots/v1-workflows/WF-09-S04-report-builder-desktop.png" caption="Export — Report Builder with a live 28-page PDF preview." cls="OBSERVED — TEST DATA" />
+  <Shot file="/screenshots/v1-workflows/WF-01-S05-dashboard-field-mobile.png" caption="Field — the phone-first bottom-nav experience." cls="OBSERVED" viewport="mobile" />
+</div>
+<Panel title="Most important visual / workflow findings" tone="quiet">
+  <ul>
+    <li><strong>The configure→capture spine is genuinely present:</strong> design presets flow into the field drill dialog; the operator confirms and records rather than decides.</li>
+    <li><strong>There is no confirm/QA gate:</strong> the Drill Summary "Review" column stays empty and export acts on live data — reviewing is not confirming (confirms the PD).</li>
+    <li><strong>Outputs are mature:</strong> a 5-sheet drill-log XLSX and a live multi-page engineer report both exist and render.</li>
+    <li><strong>Much depends on AI/integrations:</strong> the test-report PDF, OCR, voice and meeting analysis are all disabled without keys — several are load-bearing, not optional.</li>
+  </ul>
+  <p><strong>Unverified:</strong> anything AI-dependent, offline resync, map-with-tiles, and every non-RockControl tenant.</p>
+</Panel>
+</section>
+
+<!-- 02 ROLE & SURFACE MAP -->
+<section class={brk} id="g02">
+<SectionCover num="02" title="Role & Surface Map" kicker="Who sees what, on which surface">
+  The four role groups against desktop, mobile and voice surfaces, with observed thumbnails.
+</SectionCover>
+<div class="table-wrap"><table>
+  <thead><tr><th>Group</th><th>Roles</th><th>Observed navigation</th><th>Primary surface</th></tr></thead>
+  <tbody>
+    <tr><td>Management</td><td>OrgAdmin · ProjectManager · HSEManager</td><td>Full: projects, operations, safety, admin, settings</td><td>Desktop</td></tr>
+    <tr><td>Supervisor</td><td>SiteSupervisor</td><td>Operations + safety + meetings; trimmed admin</td><td>Desktop / tablet</td></tr>
+    <tr><td>Field</td><td>FieldTech · Subcontractor</td><td>Drill, Daily Activity, Notes, safety-lite, Forms, My Submissions — must pick a project on Drill</td><td>Mobile</td></tr>
+    <tr><td>Viewer</td><td>ClientViewer</td><td>Read-only surfaces</td><td>Desktop</td></tr>
+  </tbody>
+</table></div>
+<div class="strip">
+  <Shot file="/screenshots/v1-workflows/WF-01-S02-dashboard-admin-desktop.png" caption="Management (OrgAdmin) — full navigation." cls="OBSERVED — TEST DATA" />
+  <Shot file="/screenshots/v1-workflows/WF-01-S04-dashboard-field-desktop.png" caption="Field — capture-focused navigation." cls="OBSERVED" />
+  <Shot file="/screenshots/v1-workflows/WF-01-S04b-dashboard-viewer-desktop.png" caption="Viewer — read-only." cls="OBSERVED" />
+</div>
+<div class="strip">
+  <Shot file="/screenshots/v1-workflows/WF-01-S05-dashboard-field-mobile.png" caption="Mobile field surface + bottom nav." cls="OBSERVED" viewport="mobile" />
+  <Shot file="/screenshots/v1-workflows/WF-13-S01-voice-dialog-desktop.png" caption="Voice surface — Quick Voice Report (extraction blocked)." cls="PARTIALLY OBSERVED" />
+  <Shot file="/screenshots/v1-workflows/WF-01-S06-tacedge-brand-landing-desktop.png" caption="TACEDGE-brand shell (host fallback)." cls="PARTIALLY OBSERVED" />
+</div>
+</section>
+
+<!-- 03 SCREEN ATLAS -->
+<section class={brk} id="g03">
+<SectionCover num="03" title="Screen Atlas" kicker={`${atlas.reduce((n, g) => n + g.entries.length, 0)} screens · every meaningful surface`}>
+  A reference grid of every meaningful accessible V1 screen, grouped by area, each with
+  its route, screen-sheet ID, role and runtime classification.
+</SectionCover>
+{atlas.map((group) => (
+  <div class="atlas-group">
+    <h2 id={`atlas-${group.title.toLowerCase().replace(/[^a-z]+/g, '-')}`}>{group.title}</h2>
+    <div class="atlas-grid">
+      {group.entries.map((e) => {
+        const slug = e.cls.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
+        return (
+          <div class="atlas-card">
+            {e.file
+              ? <div class="thumb"><img src={e.file} alt={e.name} loading="lazy" /></div>
+              : <div class="thumb blocked">{e.note || 'BLOCKED'}</div>}
+            <div class="atlas-body">
+              <h4>{e.name}</h4>
+              <div class="atlas-meta">
+                <code>{e.route}</code> · {e.pds} · {e.role}<br />
+                <span class={`rt rt-${slug}`} style="margin-top:0.35rem">{e.cls}</span>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+))}
+</section>
+
+<!-- 04 CORE WORKFLOWS -->
+<section class={brk} id="g04">
+<SectionCover num="04" title="Core Ground-Engineering Workflows" kicker="WF-01 to WF-10 · configure → capture → review → export">
+  The load-bearing chain, step by step, screenshot-led. These are the workflows most
+  relevant to V2 scoping.
+</SectionCover>
+{P1.map((wf) => <WorkflowSection wf={wf} />)}
+</section>
+
+<!-- 05 SAFETY & SUPPORTING -->
+<section class={brk} id="g05">
+<SectionCover num="05" title="Safety & Supporting Workflows" kicker="WF-11 to WF-16">
+  The safety, voice, meeting, forms and mapping workflows that run alongside the core chain.
+</SectionCover>
+{P2.map((wf) => <WorkflowSection wf={wf} />)}
+</section>
+
+<!-- 06 ADMIN & TENANT -->
+<section class={brk} id="g06">
+<SectionCover num="06" title="Administration & Tenant Workflows" kicker="WF-17 to WF-24 · safely accessible only">
+  Administration, integrations and tenant surfaces observed in the local runtime. LPC
+  port (WF-22) and the AI assistant (WF-21) were BLOCKED and are recorded as such.
+</SectionCover>
+{P3.map((wf) => <WorkflowSection wf={wf} />)}
+</section>
+
+<!-- 07 CROSS-WORKFLOW FINDINGS -->
+<section class={brk} id="g07">
+<SectionCover num="07" title="Cross-Workflow Findings" kicker="Patterns across the whole product">
+  What repeated across workflows — strengths and V2 scoping risks.
+</SectionCover>
+<div class="table-wrap"><table>
+  <thead><tr><th>Theme</th><th>Observation</th></tr></thead>
+  <tbody>
+    <tr><td>Navigation consistency</td><td>A single, coherent sidebar + top bar across surfaces; role trims are clean; mobile has a purpose-built bottom bar. Consistent and legible.</td></tr>
+    <tr><td>Role clarity</td><td>The four groups are visibly distinct; Field is meaningfully trimmed. Subcontractor vs FieldTech was not separable at runtime (identical capabilities).</td></tr>
+    <tr><td>Mobile usability</td><td>Capture screens are genuinely phone-first (drill grid, quick-fill, forms, sign-in). Management surfaces are desktop-oriented.</td></tr>
+    <tr><td>Workflow hand-offs</td><td>Field capture → PM review is live and clear. PM review → outward record is an <em>export</em>, not a hand-off through a confirmed state.</td></tr>
+    <tr><td>Status &amp; lifecycle</td><td>Anchor status auto-advances and is shown consistently. There is no review-state lifecycle and no confirm gate (RV-02).</td></tr>
+    <tr><td>Duplicate concepts</td><td>Two capture paths (planned vs "Just Drill"); two document surfaces (project docs vs SharePoint); semi-legacy Jobs/Sites still routed.</td></tr>
+    <tr><td>Customer-specific branching</td><td>In-app brand rendered as TACEDGE for the RockControl tenant locally (RV-12) — a sign of brand resolution leaking beyond config.</td></tr>
+    <tr><td>Offline behaviour</td><td>Machinery exists (sync queue) but was not exercised; a genuine risk area for the V2 "full shift offline" bar.</td></tr>
+    <tr><td>Error / empty handling</td><td>Empty and integration-absent states are graceful (Documents, Surveys, Calendar). Form validation blocks incomplete submissions.</td></tr>
+    <tr><td>Data-entry burden</td><td>Design presets sharply reduce field entry (a real strength). PM setup is spread across many tabs with no guided first-run.</td></tr>
+    <tr><td>Export dependence</td><td>The outward record is a file. The engineering test-report PDF depends on AI (RV-05) — a reliability coupling worth noting.</td></tr>
+    <tr><td>Genuine strengths</td><td>Preset inheritance, the status-coloured anchor plan/grid, the XLSX export depth, and the live report-preview builder.</td></tr>
+    <tr><td>V2 scoping risks</td><td>No confirm lifecycle; AI in the trusted-record path; tenant branching in code; multiple overlapping models to migrate.</td></tr>
+  </tbody>
+</table></div>
+</section>
+
+<!-- 08 V1->V2 VISUAL ORIENTATION -->
+<section class={brk} id="g08">
+<SectionCover num="08" title="V1 → V2 Visual Orientation" kicker="Observed V1 beside the V2 reference direction">
+  Neutral orientation only — not a delta report. V1 comes from this runtime; V2 comes
+  from the reference package.
+</SectionCover>
+<div class="table-wrap"><table>
+  <thead><tr><th>Area</th><th>V1 (observed)</th><th>V2 (reference direction)</th><th>Nature of delta</th><th>Question for the Technical Lead</th></tr></thead>
+  <tbody>
+    <tr><td>Review lifecycle</td><td>Drill Summary reviews; no confirm gate; export on live data (RV-02).</td><td>Two-dimension model: work phase + review state (submitted → confirmed → re-opened); confirmed-only-outward.</td><td>Review lifecycle · data model</td><td>How does the confirm dimension graft onto the flat anchor-log table?</td></tr>
+    <tr><td>Engineer surface</td><td>ClientViewer read-only role; outward record is an emailed file.</td><td>A glance-first engineer view of confirmed records; QA queue; closeout from the live record.</td><td>UX · workflow</td><td>What server state must exist before an engineer view is honest?</td></tr>
+    <tr><td>Field capture</td><td>Quick-fill dialog inheriting design presets; status auto-advances.</td><td>Same spine, but capture feeds the confirm lifecycle and a Status Board.</td><td>Workflow</td><td>Does the capture dialog change, or only what happens to its output?</td></tr>
+    <tr><td>Work types</td><td>Anchors hard-coded end to end.</td><td>Work type = completion-criteria configuration on one spine (anchoring + piling proven).</td><td>Data model · architecture</td><td>Can the anchor schema generalise, or is a work-item abstraction new core?</td></tr>
+    <tr><td>Sign-on</td><td>JSA daily sign-in exists; drilling is NOT gated on it.</td><td>Sign-on gates drilling (SOS-4) — the one enforced barrier.</td><td>Workflow</td><td>Where does the gate live and does V1's form model support it?</td></tr>
+    <tr><td>AI</td><td>Broad and often load-bearing (test PDF, OCR, voice, analysis) — disabled without keys.</td><td>Narrow, human-approved: plan import + test conversion; voice a "Should".</td><td>Product scope · reliability</td><td>Which V1 AI features earn a place in V2's propose-approve-commit discipline?</td></tr>
+    <tr><td>Reporting</td><td>Report Builder with live multi-page PDF + revisions.</td><td>Reporting as release: confirmed records reach the engineer.</td><td>Reporting · workflow</td><td>Does the builder become the closeout tool, or does release-from-record replace it?</td></tr>
+    <tr><td>Platform config</td><td>In-app brand leaked to TACEDGE for a non-TACEDGE tenant (RV-12).</td><td>Config-not-code; a clean, documented config boundary.</td><td>Platform configuration</td><td>Where must the tenant-config boundary sit to stop brand/logic leaking into code?</td></tr>
+  </tbody>
+</table></div>
+</section>
+
+<!-- 09 RUNTIME VALIDATION -->
+<section class={brk} id="g09">
+<SectionCover num="09" title="Runtime Validation Findings" kicker="Runtime vs the static Product Definition">
+  Where the running application confirmed, refined or contradicted the Product Definition.
+  The full register is <code>evidence/V1_Runtime_Validation_Findings.md</code>; the
+  Product Definition itself is not modified here.
+</SectionCover>
+<div class="table-wrap"><table>
+  <thead><tr><th>ID</th><th>Finding</th><th>Result</th><th>Evidence</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">RV-01</td><td>The application runs; the "not run / no screenshots" gap is closed for the RockControl tenant.</td><td><span class="rt rt-partially-observed">Refined</span></td><td>~69 screenshots</td></tr>
+    <tr><td class="mono">RV-02</td><td>No QA/confirm gate — Drill Summary Review column stays empty; needsPmReview is a flag.</td><td><span class="rt rt-observed">Confirmed</span></td><td>WF-08-S01</td></tr>
+    <tr><td class="mono">RV-03</td><td>Design presets flow into field capture (configure→capture spine).</td><td><span class="rt rt-observed">Confirmed</span></td><td>WF-05-S03</td></tr>
+    <tr><td class="mono">RV-04</td><td>Anchor status auto-advances and is shown consistently.</td><td><span class="rt rt-observed">Confirmed</span></td><td>WF-03-S01</td></tr>
+    <tr><td class="mono">RV-05</td><td>The engineering test-report PDF itself depends on the AI service (HTTP 500 without a key).</td><td><span class="rt rt-contradicted">Refined</span></td><td>Server log</td></tr>
+    <tr><td class="mono">RV-06</td><td>Drill-log XLSX export works — a 5-sheet workbook.</td><td><span class="rt rt-observed">Confirmed</span></td><td>WF-09-S01</td></tr>
+    <tr><td class="mono">RV-07</td><td>Report Builder produces a live multi-page PDF with signatory metadata.</td><td><span class="rt rt-observed">Confirmed</span></td><td>WF-09-S04</td></tr>
+    <tr><td class="mono">RV-08</td><td><code>RESEND_API_KEY</code> is required at boot (server crashes without it).</td><td><span class="rt rt-contradicted">Contradicted</span></td><td>Boot log</td></tr>
+    <tr><td class="mono">RV-09</td><td>Fail-open webhook validation — the app logs "endpoints are unprotected" at boot.</td><td><span class="rt rt-observed">Confirmed</span></td><td>Boot log</td></tr>
+    <tr><td class="mono">RV-10</td><td>A project-less "Just Drill" one-off capture path exists.</td><td><span class="rt rt-partially-observed">New</span></td><td>WF-04-S00</td></tr>
+    <tr><td class="mono">RV-11</td><td>FieldTech nav is materially trimmed; drill requires project selection.</td><td><span class="rt rt-observed">Confirmed</span></td><td>WF-04-S00</td></tr>
+    <tr><td class="mono">RV-12</td><td>In-app shell shows TACEDGE branding for the RockControl tenant (local).</td><td><span class="rt rt-partially-observed">Caution</span></td><td>WF-01-S01/02</td></tr>
+  </tbody>
+</table></div>
+<Panel title="Recommended Product Definition updates (not applied here)" tone="warn">
+  <p>Two narrow corrections surfaced: <strong>RV-05</strong> — note the test-report PDF's AI
+  dependency; <strong>RV-08</strong> — add <code>RESEND_API_KEY</code> to the effective
+  fail-closed-at-boot set (any value satisfies boot; it only fails on send). The Product
+  Definition's core findings otherwise held up against the runtime.</p>
+</Panel>
+</section>
+
+<!-- 10 APPENDICES -->
+<section class={brk} id="g10">
+<SectionCover num="10" title="Appendices" kicker="Registers · matrices · methodology">
+  Reference tables. The machine-readable registers live under <code>evidence/</code>.
+</SectionCover>
+
+<h2 id="g-a-screenshots">A. Screenshot register (summary)</h2>
+<p>
+  {atlas.reduce((n, g) => n + g.entries.length, 0)}+ screens captured;
+  full per-image detail (filename, route, PDS, capability, role, classification,
+  data type, redaction) is in <code>evidence/V1_Screenshot_Register.csv</code>. All
+  images use fictional/test data; no redaction was required and none was applied.
+</p>
+
+<h2 id="g-a-workflows">B. Workflow register</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>ID</th><th>Workflow</th><th>Actor</th><th>Runtime</th><th>Principal limitation</th></tr></thead>
+  <tbody>
+    {workflows.map((w) => {
+      const slug = w.cls.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
+      return (
+        <tr>
+          <td class="mono">{w.id}</td>
+          <td>{w.name}</td>
+          <td>{w.actor}</td>
+          <td><span class={`rt rt-${slug}`}>{w.cls}</span></td>
+          <td>{wfLimits[w.id] || '—'}</td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table></div>
+
+<h2 id="g-a-blocked">C. Blocked / uncaptured</h2>
+<ul>
+  <li><strong>BLOCKED workflows:</strong> WF-21 (Ask RC assistant — no AI key), WF-22 (LPC port experience — no tenant/domain).</li>
+  <li><strong>BLOCKED actions within workflows:</strong> AI plan import &amp; job brief (WF-03), test-sheet OCR &amp; test-report PDF (WF-07), voice extraction (WF-13), meeting recording/analysis (WF-14), map tiles (WF-16), SharePoint browse (WF-20), drone worker (WF-23), Outlook connect (WF-24).</li>
+  <li><strong>Tenant variants not captured:</strong> LPC port, SteepWorks, and full TACEDGE-brand (only the host-fallback shell was seen).</li>
+</ul>
+
+<h2 id="g-a-method">D. Capture &amp; sanitisation methodology</h2>
+<ul>
+  <li><strong>Runtime:</strong> disposable copy of TACEDGE Geotech @ <code>{BASELINE.v1ShaShort}</code>, local PostgreSQL 16 on 127.0.0.1:5433, seeded by the repo's own <code>seed-local.cjs</code> with names further fictionalised. Server: <code>npm run dev</code> on :5000.</li>
+  <li><strong>Automation:</strong> Puppeteer (Chromium) capture scripts in <code>tools/</code> — deterministic viewports (1440×900 desktop, 390×844 mobile), animations disabled, session cookies from throwaway local accounts (never committed). Scripts never send communications or create production records.</li>
+  <li><strong>Sanitisation:</strong> all data is fictional/seeded, so screenshots needed no redaction; each was reviewed before inclusion. Raw captures live in the gitignored <code>working/</code>; only reviewed images are in <code>public/screenshots/v1-workflows/</code>.</li>
+</ul>
+
+<h2 id="g-a-baseline">E. Runtime &amp; repository baseline</h2>
+<MetaPanel items={[
+  { label: 'Evidence source', value: `${BASELINE.v1Repo} @ <code>${BASELINE.v1Sha}</code>` },
+  { label: 'Runtime', value: 'Local disposable · PostgreSQL 16 · Node dev server' },
+  { label: 'Tenant', value: 'RockControl (engineering)' },
+  { label: 'Roles', value: 'OrgAdmin · ProjectManager · SiteSupervisor · FieldTech · ClientViewer (all fictional)' },
+  { label: 'Inspection date', value: BASELINE.inspectionDate },
+  { label: 'Output repo', value: `${BASELINE.pdRepo} · ${BASELINE.pdBranch}` },
+]} />
+
+<h2 id="g-a-open">F. Open validation questions</h2>
+<ul>
+  <li>Confirm in-app branding on a real tenant domain (RV-12).</li>
+  <li>Observe every AI-dependent path with keys (import, OCR, test PDF, voice, meeting analysis).</li>
+  <li>Field-test offline capture and resync against the "full shift" bar.</li>
+  <li>Capture the LPC port, SteepWorks and full TACEDGE-brand experiences on configured tenants.</li>
+  <li>Confirm which exports customers actually receive, and which incident store is authoritative.</li>
+</ul>
+</section>

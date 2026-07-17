@@ -1,0 +1,84 @@
+Planned Screenshot ID,Workflow ID,Step,Screen name,Route,PDS ID,Capability IDs,User role,Tenant,Viewport,Runtime environment,Required action,Read only / write,External side-effect risk,Capture status,Notes
+WF-01-S01,WF-01,1,Login,/login,PDS-AUTH,V1-AUTH-01,Public,RockControl (localhost),1440x900,local,None,Read only,None,Planned,Tenant-branded login
+WF-01-S02,WF-01,2,Dashboard (OrgAdmin),/,PDS-DSH,V1-DSH-01,OrgAdmin,RockControl,1440x900,local,Login,Read only,None,Planned,
+WF-01-S03,WF-01,3,Sidebar navigation,/,PDS-DSH,V1-ORG-03,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,Full management nav
+WF-01-S04,WF-01,4,Dashboard (FieldTech),/,PDS-DSH,V1-DSH-01,FieldTech,RockControl,1440x900,local,Login as field,Read only,None,Planned,Role-trimmed nav
+WF-01-S05,WF-01,5,Mobile dashboard + bottom nav,/,PDS-DSH,V1-OFF-01,FieldTech,RockControl,390x844,local,None,Read only,None,Planned,Bottom bar Home/This Page/Drill/Voice
+WF-01-S06,WF-01,6,TACEDGE brand landing,/ via 127.0.0.1,PDS-MKT,V1-MKT-01,Public,TACEDGE default brand,1440x900,local,None,Read only,None,Planned,Host-fallback brand variant
+WF-02-S01,WF-02,1,Projects list,/projects,PDS-PRJ,V1-PRJ-01,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,
+WF-02-S02,WF-02,2,Project detail overview,/projects/:id,PDS-PRJD,V1-PRJ-01,OrgAdmin,RockControl,1440x900,local,Open project,Read only,None,Planned,
+WF-02-S03,WF-02,3,Zones & sections setup,/projects/:id (design tab),PDS-PRJD,V1-PRJ-02,OrgAdmin,RockControl,1440x900,local,View zones,Read only,None,Planned,
+WF-02-S04,WF-02,4,Anchor designs,/projects/:id (design tab),PDS-PRJD,V1-CFG-01,OrgAdmin,RockControl,1440x900,local,View designs,Read only,None,Planned,Seeded RB25G/RB16G
+WF-02-S05,WF-02,5,Create drill method,/projects/:id (design tab),PDS-PRJD,V1-CFG-03,OrgAdmin,RockControl,1440x900,local,Create,Write (local test DB),None,Planned,Safe local write
+WF-02-S06,WF-02,6,Create grout mix,/projects/:id (design tab),PDS-PRJD,V1-CFG-02,OrgAdmin,RockControl,1440x900,local,Create,Write (local test DB),None,Planned,
+WF-02-S07,WF-02,7,Project team,/projects/:id (team),PDS-PRJD,V1-PRJ-03,OrgAdmin,RockControl,1440x900,local,View,Read only,None,Planned,
+WF-02-S08,WF-02,8,Project documents,/projects/:id (documents),PDS-PRJD,V1-PRJ-04,OrgAdmin,RockControl,1440x900,local,Upload neutral test PDF,Write (local),None,Planned,
+WF-03-S01,WF-03,1,Planned anchors in grid,/projects/:id (anchors),PDS-PRJD,V1-PRJ-02,ProjectManager,RockControl,1440x900,local,View,Read only,None,Planned,B3/B4 planned
+WF-03-S02,WF-03,2,Add planned anchor,/projects/:id (anchors),PDS-PRJD,V1-CFG-01,ProjectManager,RockControl,1440x900,local,Create planned anchor,Write (local),None,Planned,
+WF-03-S03,WF-03,3,AI PDF plan import dialog,/projects/:id (import),PDS-PRJD,V1-PLN-01,ProjectManager,RockControl,1440x900,local,Open dialog only,Read only,None,Planned,AI BLOCKED (no key) — capture entry state
+WF-04-S01,WF-04,1,Drill grid anchor selection,/drill,PDS-DRL,V1-DRL-01,FieldTech,RockControl,390x844,local,Select project/zone,Read only,None,Planned,Mobile-first
+WF-04-S02,WF-04,2,Face-photo anchor map,/projects/:id (face photos),PDS-PRJD,V1-MAP-02,ProjectManager,RockControl,1440x900,local,Upload synthetic face image + pin,Write (local),None,Planned,Neutral generated imagery
+WF-05-S01,WF-05,1,Drill screen (project/zone),/drill,PDS-DRL,V1-DRL-01,FieldTech,RockControl,390x844,local,None,Read only,None,Planned,
+WF-05-S02,WF-05,2,Drill capture dialog,/drill,PDS-DRL,V1-DRL-01,FieldTech,RockControl,390x844,local,Open planned anchor,Read only,None,Planned,Preset design info
+WF-05-S03,WF-05,3,Drill inputs + lithology,/drill,PDS-DRL,V1-DRL-02,FieldTech,RockControl,390x844,local,Enter drill + lithology,Write (local),None,Planned,
+WF-05-S04,WF-05,4,Saved — status drilled,/drill,PDS-DRL,V1-DRL-01,FieldTech,RockControl,390x844,local,Save,Write (local),None,Planned,Status auto-advance
+WF-05-S05,WF-05,5,Drill grid desktop,/drill,PDS-DRL,V1-DRL-03,SiteSupervisor,RockControl,1440x900,local,None,Read only,None,Planned,Desktop comparison
+WF-06-S01,WF-06,1,Grout quick-fill,/drill,PDS-DRL,V1-GRT-01,FieldTech,RockControl,390x844,local,Grout drilled anchor,Write (local),None,Planned,B1 or B2
+WF-06-S02,WF-06,2,Status grouted,/drill,PDS-DRL,V1-GRT-01,FieldTech,RockControl,390x844,local,Save,Write (local),None,Planned,
+WF-07-S01,WF-07,1,Anchor Testing list,/anchor-testing,PDS-TST,V1-TST-01,ProjectManager,RockControl,1440x900,local,None,Read only,None,Planned,Seeded tests incl. A3 FAIL
+WF-07-S02,WF-07,2,Test detail + readings,/anchor-testing,PDS-TST,V1-TST-02,ProjectManager,RockControl,1440x900,local,Open A1,Read only,None,Planned,6 load steps
+WF-07-S03,WF-07,3,Non-conformant test,/anchor-testing,PDS-TST,V1-TST-01,ProjectManager,RockControl,1440x900,local,Open A3,Read only,None,Planned,FAIL state
+WF-07-S04,WF-07,4,Test OCR entry point,/anchor-testing,PDS-TST,V1-TST-03,ProjectManager,RockControl,1440x900,local,Open OCR control only,Read only,None,Planned,AI BLOCKED — capture entry
+WF-07-S05,WF-07,5,Test report PDF,/api/...report-pdf,PDS-TST,V1-TST-04,ProjectManager,RockControl,1440x900,local,Download,Read only,None,Planned,Render first page
+WF-08-S01,WF-08,1,Drill Summary,/anchor-logs,PDS-ALG,V1-DRL-03,ProjectManager,RockControl,1440x900,local,None,Read only,None,Planned,All 12 anchors
+WF-08-S02,WF-08,2,Filters,/anchor-logs,PDS-ALG,V1-DRL-03,ProjectManager,RockControl,1440x900,local,Filter,Read only,None,Planned,
+WF-08-S03,WF-08,3,Log detail dialog,/anchor-logs,PDS-ALG,V1-DRL-01,ProjectManager,RockControl,1440x900,local,Open row,Read only,None,Planned,needsPmReview visible
+WF-08-S04,WF-08,4,Bulk edit,/anchor-logs,PDS-ALG,V1-DRL-03,ProjectManager,RockControl,1440x900,local,Select rows,Read only,None,Planned,No confirm gate — note it
+WF-09-S01,WF-09,1,Drill-log XLSX export,/anchor-logs,PDS-ALG,V1-RPT-03,ProjectManager,RockControl,1440x900,local,Export,Read only,None,Planned,Open XLSX preview externally rendered
+WF-09-S02,WF-09,2,Email logs dialog,/anchor-logs,PDS-ALG,V1-RPT-03,ProjectManager,RockControl,1440x900,local,Open dialog only — DO NOT SEND,Read only,None (send disabled),Planned,
+WF-09-S03,WF-09,3,Project reports list,/projects/:id/reports,PDS-RPT,V1-RPT-01,ProjectManager,RockControl,1440x900,local,None,Read only,None,Planned,Seeded report
+WF-09-S04,WF-09,4,Report Builder editor,/reports/:id,PDS-RPT,V1-RPT-01,ProjectManager,RockControl,1440x900,local,Open,Read only,None,Planned,Tiptap blocks + data blocks
+WF-09-S05,WF-09,5,Report revisions/signatories,/reports/:id,PDS-RPT,V1-RPT-01,ProjectManager,RockControl,1440x900,local,View,Read only,None,Planned,
+WF-09-S06,WF-09,6,AI propose (disabled),/reports/:id,PDS-RPT,V1-RPT-02,ProjectManager,RockControl,1440x900,local,Open control,Read only,None,Planned,BLOCKED
+WF-10-S01,WF-10,1,DAS list,/daily-activity,PDS-DAS,V1-DAS-01,SiteSupervisor,RockControl,1440x900,local,None,Read only,None,Planned,
+WF-10-S02,WF-10,2,New DAS crew/plant/hours,/daily-activity,PDS-DAS,V1-DAS-01,SiteSupervisor,RockControl,1440x900,local,Create sheet,Write (local),None,Planned,DAS specs seeded via UI/API first
+WF-10-S03,WF-10,3,DAS PDF export,/daily-activity,PDS-DAS,V1-DAS-03,SiteSupervisor,RockControl,1440x900,local,Export,Read only,None,Planned,
+WF-10-S04,WF-10,4,DAS mobile,/daily-activity,PDS-DAS,V1-DAS-01,FieldTech,RockControl,390x844,local,None,Read only,None,Planned,
+WF-11-S01,WF-11,1,JSA template w/ daily sign-in,/form-builder,PDS-FB,V1-SAF-04,OrgAdmin,RockControl,1440x900,local,Create template,Write (local),None,Planned,
+WF-11-S02,WF-11,2,JSA fill + signature,/forms/:id,PDS-FRM,V1-SAF-04,FieldTech,RockControl,390x844,local,Submit,Write (local),None,Planned,Fictional signature squiggle
+WF-11-S03,WF-11,3,Daily sign-in record,/forms/:id,PDS-FRM,V1-SAF-04,FieldTech,RockControl,390x844,local,Sign in,Write (local),None,Planned,Drilling NOT gated — verify
+WF-12-S01,WF-12,1,Incidents list,/incidents,PDS-SAF,V1-SAF-01,HSE/PM,RockControl,1440x900,local,None,Read only,None,Planned,
+WF-12-S02,WF-12,2,New incident form,/forms/:id,PDS-FRM,V1-SAF-01,FieldTech,RockControl,390x844,local,Submit fictional test incident,Write (local),None (Teams/SharePoint disabled),Planned,
+WF-12-S03,WF-12,3,Submission detail + status,/submissions,PDS-SUB,V1-FRM-03,ProjectManager,RockControl,1440x900,local,Open,Read only,None,Planned,AI analyze BLOCKED
+WF-13-S01,WF-13,1,Voice report dialog,__voice__,PDS-DSH,V1-VCE-02,FieldTech,RockControl,390x844,local,Open dialog only,Read only,None,Planned,Deepgram BLOCKED
+WF-14-S01,WF-14,1,Meetings list,/meetings,PDS-MTG,V1-MTG-01,SiteSupervisor,RockControl,1440x900,local,None,Read only,None,Planned,
+WF-14-S02,WF-14,2,Create meeting,/meetings,PDS-MTG,V1-MTG-01,SiteSupervisor,RockControl,1440x900,local,Create,Write (local),None,Planned,
+WF-14-S03,WF-14,3,Meeting detail + attendance,/meetings/:id,PDS-MTGD,V1-MTG-01,SiteSupervisor,RockControl,1440x900,local,Add participant,Write (local),None,Planned,Recording/AI BLOCKED
+WF-15-S01,WF-15,1,Form templates gallery,/forms,PDS-FRM,V1-FRM-01,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,
+WF-15-S02,WF-15,2,Form builder,/form-builder,PDS-FB,V1-FRM-01,OrgAdmin,RockControl,1440x900,local,Build fields,Write (local),None,Planned,
+WF-15-S03,WF-15,3,Mobile form fill,/forms/:id,PDS-FRM,V1-FRM-02,FieldTech,RockControl,390x844,local,Fill,Write (local),None,Planned,
+WF-15-S04,WF-15,4,Submissions inbox,/submissions,PDS-SUB,V1-FRM-03,ProjectManager,RockControl,1440x900,local,None,Read only,None,Planned,
+WF-16-S01,WF-16,1,Project map (no tiles),/projects/:id (map),PDS-PRJD,V1-MAP-01,ProjectManager,RockControl,1440x900,local,None,Read only,None,Planned,LINZ keys absent — note limitation
+WF-16-S02,WF-16,2,Face photo + anchor pins,/projects/:id (face photos),PDS-PRJD,V1-MAP-02,ProjectManager,RockControl,1440x900,local,Pin anchors,Write (local),None,Planned,Synthetic image
+WF-17-S01,WF-17,1,Asset register + expiry,/assets,PDS-AST,V1-AST-01,OrgAdmin,RockControl,1440x900,local,Create jack asset,Write (local),None,Planned,
+WF-18-S01,WF-18,1,Users admin,/settings,PDS-SET,V1-USR-01,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,
+WF-18-S02,WF-18,2,Role permissions matrix,/settings,PDS-SET,V1-USR-02,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,
+WF-19-S01,WF-19,1,Branding tab,/settings,PDS-SET,V1-ORG-02,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,
+WF-20-S01,WF-20,1,Documents (SharePoint) blocked state,/documents,PDS-DOC,V1-DOC-01,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,BLOCKED integration
+WF-21-S01,WF-21,1,Ask RC entry (disabled),top bar,PDS-DSH,V1-AIA-01,OrgAdmin,RockControl,1440x900,local,Open,Read only,None,Planned,BLOCKED
+WF-22-S01,WF-22,—,LPC port experience,—,—,V1-DSH-02,—,LPC,—,local,—,—,None,BLOCKED,No LPC tenant data/domain locally
+WF-23-S01,WF-23,1,Drone surveys tab (empty),/projects/:id (surveys),PDS-PRJD,V1-DRN-01,ProjectManager,RockControl,1440x900,local,None,Read only,None,Planned,Worker BLOCKED
+WF-24-S01,WF-24,1,Global search,top bar,PDS-DSH,V1-SRCH-01,OrgAdmin,RockControl,1440x900,local,Search seeded data,Read only,None,Planned,
+WF-24-S02,WF-24,2,Calendar,/calendar,PDS-CAL,V1-CAL-01,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,Outlook connect BLOCKED
+ATLAS-01,ATLAS,—,Register,/register,PDS-AUTH,V1-AUTH-01,Public,RockControl,1440x900,local,None,Read only,None,Planned,
+ATLAS-02,ATLAS,—,Forgot password,/forgot-password,PDS-AUTH,V1-AUTH-04,Public,RockControl,1440x900,local,None,Read only,None,Planned,
+ATLAS-03,ATLAS,—,Request access,/request-access,PDS-AUTH,V1-AUTH-05,Public,RockControl,1440x900,local,None,Read only,None,Planned,
+ATLAS-04,ATLAS,—,Jobs list,/jobs,PDS-JOB,V1-LEG-02,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,Semi-legacy; likely empty
+ATLAS-05,ATLAS,—,Sites list,/sites,PDS-SIT,V1-LEG-01,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,Semi-legacy; likely empty
+ATLAS-06,ATLAS,—,Notes,/notes,PDS-NTS,V1-NOT-01,FieldTech,RockControl,1440x900,local,Create note,Write (local),None,Planned,
+ATLAS-07,ATLAS,—,Variations,/variations,PDS-VAR,V1-VAR-01,ProjectManager,RockControl,1440x900,local,None,Read only,None,Planned,
+ATLAS-08,ATLAS,—,Profile + PWA install,/profile,PDS-PRF,V1-OFF-01,FieldTech,RockControl,390x844,local,None,Read only,None,Planned,
+ATLAS-09,ATLAS,—,Help,/help,PDS-PRF,—,FieldTech,RockControl,1440x900,local,None,Read only,None,Planned,
+ATLAS-10,ATLAS,—,Near misses / inspections / assessments,/near-misses etc.,PDS-SAF,V1-SAF-02,HSE,RockControl,1440x900,local,None,Read only,None,Planned,One representative
+ATLAS-11,ATLAS,—,Not found,/nonexistent,—,—,OrgAdmin,RockControl,1440x900,local,None,Read only,None,Planned,
+ATLAS-12,ATLAS,—,TACEDGE marketing pages,/geotech via 127.0.0.1,PDS-MKT,V1-MKT-01,Public,TACEDGE brand,1440x900,local,None,Read only,None,Planned,

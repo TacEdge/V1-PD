@@ -10,6 +10,7 @@ import '@fontsource/jetbrains-mono/500.css';
 import '@fontsource/jetbrains-mono/700.css';
 import '../styles/global.css';
 import '../styles/print.css';
+import '../styles/guide.css';
 import { BASELINE, SECTIONS } from '../data/site';
 
 interface Props {
@@ -78,6 +79,9 @@ const path = Astro.url.pathname;
             ))}
             <a href="/print" aria-current={path.startsWith('/print') ? 'page' : undefined}>
               <span class="n">⎙</span>Print Product Definition
+            </a>
+            <a href="/v1-screenshots-workflows" aria-current={path.startsWith('/v1-screenshots-workflows') ? 'page' : undefined} style="margin-top:0.75rem;border-top:1px solid rgba(174,184,156,0.25);padding-top:0.75rem">
+              <span class="n">▦</span>Screenshots &amp; Workflows
             </a>
           </nav>
           <div class="side-meta">

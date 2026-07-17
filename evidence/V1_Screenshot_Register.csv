@@ -1,0 +1,67 @@
+Screenshot ID,Filename,Workflow ID,Step,Screen name,Route,PDS ID,Capability IDs,Role,Tenant,Environment,Viewport,Capture date,Runtime classification,Data type,Redaction performed,External action triggered,Notes
+WF-01-S01,WF-01-S01-login-desktop.png,WF-01,1,Login,/login,PDS-AUTH,V1-AUTH-01,Public,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None (fictional),None,RockControl brand resolved pre-login
+WF-01-S02,WF-01-S02-dashboard-admin-desktop.png,WF-01,2,Dashboard,/,PDS-DSH,V1-DSH-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,KPI tiles + project progress + analytics
+WF-01-S03b,WF-01-S03b-mobile-drawer.png,WF-01,3,Mobile nav drawer,/,PDS-DSH,V1-ORG-03,FieldTech,RockControl,local,390x844,2026-07-17,OBSERVED,Test,None,None,
+WF-01-S04,WF-01-S04-dashboard-field-desktop.png,WF-01,4,Dashboard (field),/,PDS-DSH,V1-DSH-01,FieldTech,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,Trimmed nav
+WF-01-S04b,WF-01-S04b-dashboard-viewer-desktop.png,WF-01,4,Dashboard (viewer),/,PDS-DSH,V1-DSH-01,ClientViewer,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,Read-only role
+WF-01-S05,WF-01-S05-dashboard-field-mobile.png,WF-01,5,Mobile dashboard + bottom nav,/,PDS-DSH,V1-OFF-01,FieldTech,RockControl,local,390x844,2026-07-17,OBSERVED,Test,None,None,Bottom bar Home/This Page/Drill/Voice
+WF-01-S06,WF-01-S06-tacedge-brand-landing-desktop.png,WF-01,6,TACEDGE brand shell,/ (127.0.0.1),PDS-MKT,V1-MKT-01,Public,TACEDGE default,local,1440x900,2026-07-17,PARTIALLY OBSERVED,Test,None,None,Host-fallback brand
+WF-02-S01,WF-02-S01-projects-list-desktop.png,WF-02,1,Projects list,/projects,PDS-PRJ,V1-PRJ-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,
+WF-02-S02,WF-02-S02-project-overview-desktop.png,WF-02,2,Project overview,/projects/:id,PDS-PRJD,V1-PRJ-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Tabbed workspace
+WF-02-S03,WF-02-S03-specifications-desktop.png,WF-02,3,Specifications,/projects/:id,PDS-PRJD,V1-CFG-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Designs/mixes/methods
+WF-02-S07,WF-02-S07-records-meetings-desktop.png,WF-02,7,Records — meetings,/projects/:id,PDS-PRJD,V1-MTG-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-02-S08,WF-02-S08-project-documents-desktop.png,WF-02,8,Records — documents,/projects/:id,PDS-PRJD,V1-PRJ-04,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-03-S01,WF-03-S01-anchor-plan-desktop.png,WF-03,1,Anchor Plan,/projects/:id,PDS-PRJD,V1-PRJ-02,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Status-coloured grid + PDF import entry
+WF-03-S03,WF-03-S03-job-brief-blocked-desktop.png,WF-03,3,Job Brief (AI),/projects/:id,PDS-PRJD,V1-PLN-02,OrgAdmin,RockControl,local,1440x900,2026-07-17,BLOCKED,Test,None,None,AI disabled (no key)
+WF-04-S00,WF-04-S00-drill-project-select-desktop.png,WF-04,1,Drill — project select,/drill,PDS-DRL,V1-DRL-01,FieldTech,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,Just Drill path visible
+WF-04-S01,WF-04-S01-drill-grid-mobile.png,WF-04,2,Drill grid (mobile),/drill,PDS-DRL,V1-DRL-01,FieldTech,RockControl,local,390x844,2026-07-17,OBSERVED,Test,None,None,
+WF-04-S01b,WF-04-S01b-drill-grid-selected-desktop.png,WF-04,2,Drill grid (selected),/drill,PDS-DRL,V1-DRL-01,FieldTech,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Grid/Photo Map toggle; progress bar
+WF-05-S02,WF-05-S02-drill-dialog-planned-mobile.png,WF-05,2,Drill (mobile empty),/drill,PDS-DRL,V1-DRL-01,FieldTech,RockControl,local,390x844,2026-07-17,OBSERVED,Test,None,None,Pre-selection empty state
+WF-05-S03,WF-05-S03-drill-capture-dialog-desktop.png,WF-05,3,Driller Quick Fill,/drill,PDS-DRL,V1-DRL-01,FieldTech,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,FROM DESIGN presets + lithology + flag-for-testing
+WF-05-S05,WF-05-S05-drill-grid-desktop.png,WF-05,5,Drill grid (desktop),/drill,PDS-DRL,V1-DRL-03,SiteSupervisor,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-05-S06,WF-05-S06-quick-drill-desktop.png,WF-05,6,Quick drill mode,/drill,PDS-DRL,V1-DRL-03,FieldTech,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-06-S01,WF-05-S03-drill-capture-dialog-desktop.png,WF-06,1,Grout via quick fill,/drill,PDS-DRL,V1-GRT-01,FieldTech,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Grout captured in same dialog family
+WF-07-S01,WF-07-S01-anchor-testing-list-desktop.png,WF-07,1,Anchor Testing list,/anchor-testing,PDS-TST,V1-TST-01,ProjectManager,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,5 pass / 1 fail; standards; testers
+WF-07-S02,WF-07-S02-test-detail-desktop.png,WF-07,2,Test standards/results,/anchor-testing,PDS-TST,V1-TST-02,ProjectManager,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Proof/Max/Creep columns
+WF-07-S05,export-test-report.pdf,WF-07,5,Test report PDF,/api/.../report-pdf,PDS-TST,V1-TST-04,ProjectManager,RockControl,local,—,2026-07-17,BLOCKED,Test,None,None,500 AI service unavailable (RV-05)
+WF-08-S01,WF-08-S01-drill-summary-desktop.png,WF-08,1,Drill Summary,/anchor-logs,PDS-ALG,V1-DRL-03,ProjectManager,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Review column empty (no confirm gate)
+WF-08-S03,WF-08-S03-log-detail-dialog-desktop.png,WF-08,3,Log detail,/anchor-logs,PDS-ALG,V1-DRL-01,ProjectManager,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-09-S01,WF-09-S01-drill-log-xlsx-content.png,WF-09,1,Drill-log XLSX content,/api/.../drill-log/xlsx,PDS-ALG,V1-RPT-03,ProjectManager,RockControl,local,—,2026-07-17,OBSERVED — TEST DATA,Test,None (fictional),None,Rendered from the actual exported 5-sheet workbook
+WF-09-S02,WF-09-S02-email-logs-dialog-desktop.png,WF-09,2,Email logs dialog,/anchor-logs,PDS-ALG,V1-RPT-03,ProjectManager,RockControl,local,1440x900,2026-07-17,OBSERVED — READ ONLY,Test,None,None (NOT sent),Dialog opened only
+WF-09-S03,WF-09-S03-project-reports-desktop.png,WF-09,3,Project reports,/projects/:id (reports),PDS-RPT,V1-RPT-01,ProjectManager,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-09-S04,WF-09-S04-report-builder-desktop.png,WF-09,4,Report Builder,/reports/:id,PDS-RPT,V1-RPT-01,ProjectManager,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Live 28-page PDF preview + signatory metadata
+WF-10-S00,WF-10-S00-project-das-specs-desktop.png,WF-10,0,Project DAS specs,/projects/:id,PDS-PRJD,V1-DAS-02,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-10-S01,WF-10-S01-das-list-desktop.png,WF-10,1,DAS list,/daily-activity,PDS-DAS,V1-DAS-01,SiteSupervisor,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-10-S02,WF-10-S02-das-new-sheet-desktop.png,WF-10,2,New DAS sheet,/daily-activity,PDS-DAS,V1-DAS-01,SiteSupervisor,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Staff + plant hour tables
+WF-11-S02,WF-11-S02-jsa-fill-mobile.png,WF-11,2,JSA fill (mobile),/forms/:id,PDS-FRM,V1-SAF-04,FieldTech,RockControl,local,390x844,2026-07-17,OBSERVED — TEST DATA,Test,None,None,Daily sign-in template
+WF-12-S01,WF-12-S01-incidents-list-desktop.png,WF-12,1,Incidents list,/incidents,PDS-SAF,V1-SAF-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-12-S02,WF-12-S02-incident-fill-mobile.png,WF-12,2,Incident fill (mobile),/forms/:id,PDS-FRM,V1-SAF-01,FieldTech,RockControl,local,390x844,2026-07-17,OBSERVED — TEST DATA,Test,None,None,
+WF-12-S02b,WF-12-S02b-incident-validation-mobile.png,WF-12,2,Incident validation,/forms/:id,PDS-FRM,V1-SAF-01,FieldTech,RockControl,local,390x844,2026-07-17,OBSERVED,Test,None,None,Required-field validation
+WF-13-S01,WF-13-S01-voice-dialog-desktop.png,WF-13,1,Quick voice report,__voice__,PDS-DSH,V1-VCE-02,FieldTech,RockControl,local,1440x900,2026-07-17,PARTIALLY OBSERVED,Test,None,None,Report-type chips + mic; Deepgram BLOCKED
+WF-14-S01,WF-14-S01-meetings-list-desktop.png,WF-14,1,Meetings list,/meetings,PDS-MTG,V1-MTG-01,SiteSupervisor,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,
+WF-14-S03,WF-14-S03-meeting-detail-desktop.png,WF-14,3,Meeting detail,/meetings/:id,PDS-MTGD,V1-MTG-01,SiteSupervisor,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,Recording/AI BLOCKED
+WF-15-S01,WF-15-S01-forms-gallery-desktop.png,WF-15,1,Forms gallery,/forms,PDS-FRM,V1-FRM-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,
+WF-15-S02,WF-15-S02-form-builder-desktop.png,WF-15,2,Form Builder,/form-builder,PDS-FB,V1-FRM-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-15-S04,WF-15-S04-submissions-desktop.png,WF-15,4,Submissions inbox,/submissions,PDS-SUB,V1-FRM-03,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-16-S01,WF-16-S01-site-map-desktop.png,WF-16,1,Site Map,/projects/:id,PDS-PRJD,V1-MAP-01,ProjectManager,RockControl,local,1440x900,2026-07-17,PARTIALLY OBSERVED,Test,None,None,No tiles (no LINZ key)
+WF-17-S01,WF-17-S01-asset-register-desktop.png,WF-17,1,Asset Register,/assets,PDS-AST,V1-AST-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,
+WF-18-S01,WF-18-S01-settings-users-desktop.png,WF-18,1,Settings — users,/settings,PDS-SET,V1-USR-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,
+WF-19-S01,WF-19-S01-branding-desktop.png,WF-19,1,Settings — branding,/settings,PDS-SET,V1-ORG-02,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+WF-20-S01,WF-20-S01-documents-desktop.png,WF-20,1,Documents (blocked),/documents,PDS-DOC,V1-DOC-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — READ ONLY,Test,None,None,No libraries configured (SharePoint absent)
+WF-23-S01,WF-23-S01-surveys-empty-desktop.png,WF-23,1,Drone surveys,/projects/:id,PDS-PRJD,V1-DRN-01,ProjectManager,RockControl,local,1440x900,2026-07-17,OBSERVED — READ ONLY,Test,None,None,Empty; worker BLOCKED
+WF-24-S02,WF-24-S02-calendar-desktop.png,WF-24,2,Calendar,/calendar,PDS-CAL,V1-CAL-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,Outlook connect BLOCKED
+ATLAS-01,ATLAS-PDS-AUTH-register-desktop.png,ATLAS,—,Register,/register,PDS-AUTH,V1-AUTH-01,Public,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+ATLAS-02,ATLAS-PDS-AUTH-forgot-password-desktop.png,ATLAS,—,Forgot password,/forgot-password,PDS-AUTH,V1-AUTH-04,Public,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+ATLAS-03,ATLAS-PDS-AUTH-request-access-desktop.png,ATLAS,—,Request access,/request-access,PDS-AUTH,V1-AUTH-05,Public,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+ATLAS-04,ATLAS-PDS-JOB-jobs-desktop.png,ATLAS,—,Jobs (semi-legacy),/jobs,PDS-JOB,V1-LEG-02,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — READ ONLY,Test,None,None,
+ATLAS-05,ATLAS-PDS-SIT-sites-desktop.png,ATLAS,—,Sites (semi-legacy),/sites,PDS-SIT,V1-LEG-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — READ ONLY,Test,None,None,
+ATLAS-06,ATLAS-PDS-NTS-notes-desktop.png,ATLAS,—,Notes,/notes,PDS-NTS,V1-NOT-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED — TEST DATA,Test,None,None,
+ATLAS-07,ATLAS-PDS-VAR-variations-list-desktop.png,ATLAS,—,Variations,/variations,PDS-VAR,V1-VAR-01,ProjectManager,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+ATLAS-08,ATLAS-PDS-PRF-profile-mobile.png,ATLAS,—,Profile + PWA,/profile,PDS-PRF,V1-OFF-01,FieldTech,RockControl,local,390x844,2026-07-17,OBSERVED,Test,None,None,
+ATLAS-09,ATLAS-PDS-PRF-help-desktop.png,ATLAS,—,Help,/help,PDS-PRF,—,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+ATLAS-10,ATLAS-PDS-SAF-near-misses-desktop.png,ATLAS,—,Near misses,/near-misses,PDS-SAF,V1-SAF-02,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,Representative of 4 sibling safety lists
+ATLAS-11,ATLAS-PDS-SAF-site-inspections-desktop.png,ATLAS,—,Site inspections,/site-inspections,PDS-SAF,V1-SAF-03,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+ATLAS-12,ATLAS-PDS-SAF-asset-assessments-desktop.png,ATLAS,—,Asset assessments,/asset-assessments,PDS-SAF,V1-SAF-03,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+ATLAS-13,ATLAS-not-found-desktop.png,ATLAS,—,Not found,*,—,—,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,
+ATLAS-14,ATLAS-PDS-MKT-marketing-geotech-desktop.png,ATLAS,—,Marketing (geotech),/geotech,PDS-MKT,V1-MKT-01,Public,TACEDGE default,local,1440x900,2026-07-17,PARTIALLY OBSERVED,Test,None,None,Brand-gated marketing page
+ATLAS-15,ATLAS-PDS-VAR-project-variations-desktop.png,ATLAS,—,Project variations tab,/projects/:id,PDS-PRJD,V1-VAR-01,OrgAdmin,RockControl,local,1440x900,2026-07-17,OBSERVED,Test,None,None,

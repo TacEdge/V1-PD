@@ -1,0 +1,56 @@
+---
+import Shot from './Shot.astro';
+import type { Workflow } from '../data/workflows';
+interface Props { wf: Workflow }
+const { wf } = Astro.props;
+const clsSlug = wf.cls.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
+---
+<section class="wf print-section-break" id={wf.id}>
+  <header class="wf-head">
+    <p class="kicker">Priority {wf.priority} workflow</p>
+    <h2><span class="section-number">{wf.id}</span> · {wf.name}</h2>
+    <dl class="wf-meta">
+      <div><dt>Primary actor</dt><dd>{wf.actor}</dd></div>
+      <div><dt>Supporting</dt><dd>{wf.supporting}</dd></div>
+      <div><dt>Start route</dt><dd><code>{wf.startRoute}</code></dd></div>
+      <div><dt>End state</dt><dd>{wf.endState}</dd></div>
+      <div><dt>Runtime status</dt><dd><span class={`rt rt-${clsSlug}`}>{wf.cls}</span></dd></div>
+      <div><dt>Capabilities</dt><dd class="mono">{wf.capabilities.join(' · ')}</dd></div>
+      <div><dt>Screen sheets</dt><dd class="mono">{wf.pds.join(' · ')}</dd></div>
+    </dl>
+  </header>
+
+  <div class="wf-steps">
+    {wf.steps.map((step) => (
+      <article class="wf-step">
+        <div class="wf-step-body">
+          <div class="wf-step-n">{step.n}</div>
+          <div class="wf-step-text">
+            <p><strong>Action.</strong> {step.action}</p>
+            <p><strong>Sees.</strong> {step.sees}</p>
+            {step.records && step.records !== '—' && <p><strong>Records.</strong> {step.records}</p>}
+            {step.handoff && <p><strong>Hand-off.</strong> {step.handoff}</p>}
+            {step.note && <p class="wf-note">{step.note}</p>}
+          </div>
+        </div>
+        <div class={`wf-step-shots ${step.shots.length > 1 ? 'multi' : ''}`}>
+          {step.shots.map((sh) => (
+            <Shot file={sh.file} caption={sh.caption} viewport={sh.viewport} cls={sh.cls} />
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="wf-foot">
+    <div class="panel quiet">
+      <p class="panel-title">Workflow outcome</p>
+      <p>{wf.outcome}</p>
+      <p style="margin-top:0.5rem"><strong>External side effects:</strong> {wf.external}</p>
+    </div>
+    <div class="panel">
+      <p class="panel-title">V2 scoping relevance</p>
+      <ul>{wf.v2Questions.map((q) => <li>{q}</li>)}</ul>
+    </div>
+  </div>
+</section>

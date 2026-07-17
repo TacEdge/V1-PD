@@ -1,0 +1,15 @@
+---
+// A single sanitised screenshot with runtime-classification chip and caption.
+interface Props { file: string; caption: string; viewport?: string; cls: string; id?: string }
+const { file, caption, viewport = 'desktop', cls, id } = Astro.props;
+const slug = cls.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
+---
+<figure class={`shot shot-${viewport}`} id={id}>
+  <div class="shot-frame">
+    <img src={file} alt={caption} loading="lazy" />
+  </div>
+  <figcaption>
+    <span class={`rt rt-${slug}`}>{cls}</span>
+    {caption}
+  </figcaption>
+</figure>

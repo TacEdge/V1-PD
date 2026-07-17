@@ -1,0 +1,70 @@
+---
+import Base from '../../layouts/Base.astro';
+import GuideBody from '../../components/guide/GuideBody.astro';
+import { BASELINE } from '../../data/site';
+import '../../styles/print-landscape.css';
+---
+<Base title="Print · V1 Screenshots & Workflow Guide" bare>
+  <div class="print-shell">
+    <!-- Cover -->
+    <div class="print-cover">
+      <div>
+        <p class="kicker" style="color:var(--sage-edge)">TACEDGE · V1 Product Definition · Companion</p>
+        <h1 style="color:#fff;font-size:2.6rem;margin-top:3rem">TACEDGE Ground Engineering</h1>
+        <p style="color:var(--sage-tint);font-size:1.15rem">V1 · Screenshots &amp; Workflow Guide</p>
+        <p style="color:var(--sage-tint);max-width:32rem">
+          The runtime-observed visual companion to the V1 Product Definition, prepared for
+          the Interim Development Technical Lead ahead of the V2 technical scoping sprint.
+        </p>
+      </div>
+      <div class="mono" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--sage-edge);line-height:1.9">
+        RUNTIME&nbsp;&nbsp;Local disposable · RockControl tenant · fictional data<br/>
+        SOURCE&nbsp;&nbsp;&nbsp;{BASELINE.v1Repo} @ {BASELINE.v1ShaShort}<br/>
+        INSPECTED&nbsp;{BASELINE.inspectionDate}<br/>
+        CLASS&nbsp;&nbsp;&nbsp;&nbsp;{BASELINE.classification} · A4 LANDSCAPE
+      </div>
+    </div>
+
+    <div class="content" style="max-width:none;padding:0">
+      <h1>Contents</h1>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Section</th><th>Title</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">00</td><td>Read First</td></tr>
+          <tr><td class="mono">01</td><td>Visual Executive Summary</td></tr>
+          <tr><td class="mono">02</td><td>Role &amp; Surface Map</td></tr>
+          <tr><td class="mono">03</td><td>Screen Atlas</td></tr>
+          <tr><td class="mono">04</td><td>Core Ground-Engineering Workflows (WF-01–WF-10)</td></tr>
+          <tr><td class="mono">05</td><td>Safety &amp; Supporting Workflows (WF-11–WF-16)</td></tr>
+          <tr><td class="mono">06</td><td>Administration &amp; Tenant Workflows (WF-17–WF-24)</td></tr>
+          <tr><td class="mono">07</td><td>Cross-Workflow Findings</td></tr>
+          <tr><td class="mono">08</td><td>V1 → V2 Visual Orientation</td></tr>
+          <tr><td class="mono">09</td><td>Runtime Validation Findings</td></tr>
+          <tr><td class="mono">10</td><td>Appendices</td></tr>
+        </tbody>
+      </table></div>
+
+      <GuideBody print={true} />
+
+      <p class="print-footer">
+        {BASELINE.classification} · TACEDGE GROUND ENGINEERING V1 · SCREENSHOTS &amp; WORKFLOW GUIDE · {BASELINE.v1ShaShort}
+      </p>
+    </div>
+  </div>
+
+  <div class="topbar no-print" style="position:sticky;top:0">
+    <span class="baseline">Print view — browser Print dialog, A4 landscape, background graphics on, save as PDF.</span>
+    <button class="btn" onclick="window.print()">Print now</button>
+    <a class="btn ghost" href="/v1-screenshots-workflows">Back to guide</a>
+  </div>
+
+  <style>
+    .print-shell { max-width: 64rem; margin: 0 auto; padding: 2rem 2rem 6rem; }
+    .print-cover {
+      background: var(--primary-dark); color: var(--cream); border-radius: 8px;
+      padding: 3rem; min-height: 24rem; display: flex; flex-direction: column;
+      justify-content: space-between; margin-bottom: 3rem;
+    }
+    @media print { .print-shell { max-width: none; padding: 0; } }
+  </style>
+</Base>

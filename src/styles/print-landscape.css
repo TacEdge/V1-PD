@@ -1,0 +1,4 @@
+/* A4 landscape print — used only by the Screenshots & Workflow Guide print route. */
+@media print {
+  @page { size: A4 landscape; margin: 14mm 14mm 16mm 14mm; }
+}
