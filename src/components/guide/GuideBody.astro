@@ -168,7 +168,7 @@ const wfLimits: Record<string, string> = {
         return (
           <div class="atlas-card">
             {e.file
-              ? <div class="thumb"><img src={e.file} alt={e.name} loading="lazy" /></div>
+              ? <div class="thumb"><img src={e.file} alt={e.name} /></div>
               : <div class="thumb blocked">{e.note || 'BLOCKED'}</div>}
             <div class="atlas-body">
               <h4>{e.name}</h4>

@@ -6,7 +6,7 @@ const slug = cls.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
 ---
 <figure class={`shot shot-${viewport}`} id={id}>
   <div class="shot-frame">
-    <img src={file} alt={caption} loading="lazy" />
+    <img src={file} alt={caption} />
   </div>
   <figcaption>
     <span class={`rt rt-${slug}`}>{cls}</span>

@@ -5,7 +5,7 @@ const { id, src, alt, caption } = Astro.props;
 ---
 <figure id={id}>
   <div class="frame">
-    <img src={src} alt={alt} loading="lazy" />
+    <img src={src} alt={alt} />
   </div>
   <figcaption><span class="fig-id">{id}</span>{caption}</figcaption>
 </figure>
